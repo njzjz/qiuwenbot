@@ -104,7 +104,10 @@ def clean_roc(site: Site, user: str):
                     page.text, n2 = re_death_place.subn(replaced_chn, page.text)
                     n += n1 + n2
 
-                page.save(("[[User:Njzjzbot/task1|替换%d个非法旗帜]] - " % n) + reason)
+                try:
+                    page.save(("[[User:Njzjzbot/task1|替换%d个非法旗帜]] - " % n) + reason)
+                except:
+                    pass
                 logging(site, user, page.title(), n)
                 n_replaced.update(n)
                 n_modified.update(1)
