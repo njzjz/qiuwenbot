@@ -19,5 +19,6 @@ import os
 os.environ['PYWIKIBOT_DIR']=os.path.dirname(__file__)
 
 from .cleanrefs import main as clean_refs
+from .replaceroc import main as replace_roc
 
 __all__ = ['clean_refs']

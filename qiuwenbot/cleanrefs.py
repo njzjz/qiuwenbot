@@ -100,7 +100,7 @@ def logging(site: Site, user: str, title: str, n: int) -> None:
 
 
 def main(user: str, password: str, restart: bool=False):
-    """
+    """Start cleaning references task.
     
     Parameters
     ----------
@@ -126,7 +126,7 @@ def main(user: str, password: str, restart: bool=False):
     with logging_redirect_tqdm():
         n_removed = tqdm(position=2, desc="Removed refs")
         n_modified = tqdm(position=1, desc="Modified pages")
-        for page in tqdm(all_pages, desc="Scaned pages"):
+        for page in tqdm(all_pages, desc="Scanned pages"):
             if page.isRedirectPage():
                 continue
             try:
