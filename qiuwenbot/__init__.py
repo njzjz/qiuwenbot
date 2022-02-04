@@ -15,8 +15,14 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 # set pywikibot environment
+import tempfile
+import shutil
 import os
-os.environ['PYWIKIBOT_DIR']=os.path.dirname(__file__)
+
+tmp_dir = tempfile.mkdtemp(prefix="qiuwenbot")
+# copy user-config.py
+shutil.copyfile(os.path.join(os.path.dirname(__file__), "user-config.py"), os.path.join(tmp_dir, "user-config.py"))
+os.environ['PYWIKIBOT_DIR']=tmp_dir
 
 from .cleanrefs import main as clean_refs
 from .replaceroc import main as replace_roc
