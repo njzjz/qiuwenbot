@@ -96,18 +96,24 @@ def clean_roc(site: Site, user: str):
             if reason is not None:
                 n = 0
                 if replace_all:
-                    page.text, n1 = re_roc.subn(replaced_chn, page.text)
+                    try:
+                        page.text, n1 = re_roc.subn(replaced_chn, page.text)
+                    except:
+                        continue
                     n += n1
                 elif replace_death:
                     # nationality
-                    page.text, n1 = re_nationality.subn(replaced_chn, page.text)
-                    page.text, n2 = re_death_place.subn(replaced_chn, page.text)
+                    try:
+                        page.text, n1 = re_nationality.subn(replaced_chn, page.text)
+                        page.text, n2 = re_death_place.subn(replaced_chn, page.text)
+                    except:
+                        continue
                     n += n1 + n2
 
                 try:
                     page.save(("[[User:Njzjzbot/task1|替换%d个非法旗帜]] - " % n) + reason)
                 except:
-                    pass
+                    continue
                 logging(site, user, page.title(), n)
                 n_replaced.update(n)
                 n_modified.update(1)
