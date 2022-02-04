@@ -109,14 +109,14 @@ def clean_roc(site: Site, user: str):
                     except:
                         continue
                     n += n1 + n2
-
-                try:
-                    page.save(("[[User:Njzjzbot/task1|替换%d个非法旗帜]] - " % n) + reason)
-                except:
-                    continue
-                logging(site, user, page.title(), n)
-                n_replaced.update(n)
-                n_modified.update(1)
+                if n:
+                    try:
+                        page.save(("[[User:Njzjzbot/task1|替换%d个非法旗帜]] - " % n) + reason)
+                    except:
+                        continue
+                    logging(site, user, page.title(), n)
+                    n_replaced.update(n)
+                    n_modified.update(1)
 
 
 def main(user, password):
