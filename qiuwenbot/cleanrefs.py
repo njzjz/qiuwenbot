@@ -22,6 +22,7 @@ from typing import Tuple
 
 from .bot import login, get_page
 from .qwlogger import qwlogger
+from .utils import archieve_page
 
 
 def get_removed_urls(user: str, site: Site) -> list:
@@ -95,6 +96,8 @@ def logging(site: Site, user: str, title: str, n: int) -> None:
         number of removed references
     """
     page = get_page("User:%s/removed_refs_log" % user, site)
+    if len(page.text.split("\n")) > 2000:
+        page = archieve_page(page, site)
     page.text += "\n# [[%s]] - removed %d refs - ~~~~~" % (title, n)
     page.save("[[User:Njzjzbot/task0|记录移除参考文献的条目]]")
 
