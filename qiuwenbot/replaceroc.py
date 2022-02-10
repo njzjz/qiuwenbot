@@ -68,6 +68,7 @@ def clean_roc(site: Site, user: str):
     comment = "<!-- replaced_flag 0 by %s -->" % user
     replaced_chn = r"{{CHN}}" + comment
     replaced_chn_nationality = r"|\1={{PRC-TWN}}" + comment
+    replaced_chn_no_flag = r"|\1=[[中国]]" + comment
     replaced_death_place = r"|\1={{CHN}}" + comment
 
     with logging_redirect_tqdm():
@@ -78,6 +79,7 @@ def clean_roc(site: Site, user: str):
             replace_all = False
             replace_death = False
             replace_nationality = False
+            replace_nationality_no_flag = False
             yy = []
             for cat in page.categories():
                 m = re_birth.match(cat.title())
@@ -94,7 +96,7 @@ def clean_roc(site: Site, user: str):
                     if int(y) > 1949:
                         reason = "在世人物或新中国成立后逝世的人物"
                         replace_death = True
-                        replace_nationality = False # need a new rule to clean
+                        replace_nationality_no_flag = True
                         break
                 m = re_found.match(cat.title())
                 if m:
@@ -109,6 +111,13 @@ def clean_roc(site: Site, user: str):
                     # nationality
                     try:
                         page.text, n1 = re_nationality.subn(replaced_chn_nationality, page.text)
+                    except:
+                        continue
+                    n += n1
+                if replace_nationality_no_flag:
+                    # nationality
+                    try:
+                        page.text, n1 = re_nationality.subn(replace_nationality_no_flag, page.text)
                     except:
                         continue
                     n += n1

@@ -27,4 +27,4 @@ os.environ['PYWIKIBOT_DIR']=tmp_dir
 from .cleanrefs import main as clean_refs
 from .replaceroc import main as replace_roc
 
-__all__ = ['clean_refs']
+__all__ = ['clean_refs', 'replace_roc']
