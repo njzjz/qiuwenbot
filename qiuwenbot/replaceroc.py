@@ -59,11 +59,12 @@ def clean_roc(site: Site, user: str):
     # compiled res
     re_birth = re.compile(r'Category:(\d+)年出生')
     re_death = re.compile(r'Category:(\d+)年逝世')
-    re_found = re.compile(r'Category:(\d+)年(.*)(设立|建立|成立|创建)(.*)')
+    re_found = re.compile(r'Category:(\d+)年(.*)(设立|建立|成立|创建|創建|設立)(.*)')
+    re_event = re.compile(r'Category:(\d+)年(台灣)(.*)')
 
     re_roc = re.compile(r'({{[\s]*ROC[\s]*}})')
     re_nationality = re.compile(r'\|[\s]*(國籍|国籍|nationality)[\s]*=[\s]*({{[\s]*ROC[\s]*}})')
-    re_death_place = re.compile(r'\|[\s]*(逝世地點|逝世地点|death_place)[\s]*=[\s]*({{[\s]*ROC[\s]*}})')
+    re_death_place = re.compile(r'\|[\s]*(逝世地點|逝世地点|death_place|place_of_death|resting_place)[\s]*=[\s]*({{[\s]*ROC[\s]*}})')
 
     comment = "<!-- replaced_flag 0 by %s -->" % user
     replaced_chn = r"{{CHN}}" + comment
@@ -99,6 +100,10 @@ def clean_roc(site: Site, user: str):
                         replace_nationality_no_flag = True
                         break
                 m = re_found.match(cat.title())
+                if m:
+                    y = m.group(1)
+                    yy.append(int(y))
+                m = re_event.match(cat.title())
                 if m:
                     y = m.group(1)
                     yy.append(int(y))
