@@ -122,7 +122,7 @@ def clean_roc(site: Site, user: str):
                 if replace_nationality_no_flag:
                     # nationality
                     try:
-                        page.text, n1 = re_nationality.subn(replace_nationality_no_flag, page.text)
+                        page.text, n1 = re_nationality.subn(replaced_chn_no_flag, page.text)
                     except:
                         continue
                     n += n1
