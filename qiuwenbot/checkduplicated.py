@@ -45,7 +45,7 @@ def check_page(page: Page, site: Site, user: str):
         page_v = get_page(title_v, site)
         if page_v != page and page_v.exists():
             if not page_v.isRedirectPage():
-                if page_v.text.startswith("{{delete|"):
+                if page.text.startswith("{{delete|") or page_v.text.startswith("{{delete|"):
                     # has been marked to delete
                     continue
                 # duplicated pages A2
