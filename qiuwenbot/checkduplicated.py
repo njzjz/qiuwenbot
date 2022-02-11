@@ -25,7 +25,8 @@ from .qwlogger import qwlogger
 from .bot import login, get_page
 from .utils import archieve_page
 
-variants = ("zh-cn", "zh-tw", "zh-hk")
+#variants = ("zh-cn", "zh-tw", "zh-hk")
+variants = ("zh-hans", "zh-hant")
 
 def check_page(page: Page, site: Site, user: str):
     """Check if a page has duplicated variants.
@@ -49,16 +50,16 @@ def check_page(page: Page, site: Site, user: str):
                     # has been marked to delete
                     continue
                 # duplicated pages A2
-                page_v.text = "{{delete|A2|c1=[[User:Njzjzbot/task2|Njzjzbot]]发现-{'''%s'''}-与-{[[%s]]}-仅有简繁差异；请管理员复查页面历史记录，合并差异}}\n" % (title_v, title) + page_v.text
+                page_v.text = "{{delete|A2|c1=[[User:Njzjzbot/task2|Njzjzbot]]发现-{'''%s'''}-与-{[[%s]]}-仅有简繁差异；请管理员复查页面历史记录，合并差异[[Category:Njzjzbot/A2]]}}\n" % (title_v, title) + page_v.text
             else:
                 # duplicated redirects R1
-                if variant == 'zh-cn' and page_v.getRedirectTarget() == page:
+                if variant in ('zh-cn', 'zh-hans') and page_v.getRedirectTarget() == page:
                     # do not process zh-hans redirect, otherwise it is wrong
                     continue
                 if convert_for_mw(title_v, 'zh-cn') != convert_for_mw(title, 'zh-cn') and page_v.getRedirectTarget() == page:
                     # technical issue
                     continue
-                page_v.text = "{{delete|R1|c1=[[User:Njzjzbot/task2|Njzjzbot]]发现-{'''%s'''}-与-{[[%s]]}-仅有简繁差异}}\n" % (title_v, title) + page_v.text
+                page_v.text = "{{delete|R1|c1=[[User:Njzjzbot/task2|Njzjzbot]]发现-{'''%s'''}-与-{[[%s]]}-仅有简繁差异[[Category:Njzjzbot/R1]]}}\n" % (title_v, title) + page_v.text
             page_v.save("[[User:Njzjzbot/task2|标记速删模板]]：[[%s]]与[[%s]]仅有简繁差异" % (title_v, title))
             logging(site, user, title, title_v)
 
