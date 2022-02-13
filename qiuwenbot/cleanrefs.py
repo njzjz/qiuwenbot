@@ -77,7 +77,7 @@ def clean_refs(text: str, removed_urls: list, user: str = "") -> Tuple[str, int]
         else:
             n += 1
             text = text.replace(
-                str(ref), "<!-- removed_ref site%d by %s -->" % (ii, user))
+                str(ref.encode(formatter=None), 'utf-8'), "<!-- removed_ref site%d by %s -->" % (ii, user))
     return text, n
 
 
