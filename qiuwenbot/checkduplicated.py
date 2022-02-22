@@ -46,11 +46,12 @@ def check_page(page: Page, site: Site, user: str):
         page_v = get_page(title_v, site)
         if page_v != page and page_v.exists():
             if not page_v.isRedirectPage():
-                if page.text.startswith("{{delete|") or page_v.text.startswith("{{delete|"):
+                if page.text.startswith("<noinclude>{{delete|") or page_v.text.startswith("<noinclude>{{delete|"):
                     # has been marked to delete
                     continue
                 # duplicated pages A2
-                page_v.text = "{{delete|A2|c1=[[User:Njzjzbot/task2|Njzjzbot]]发现-{'''%s'''}-与-{[[%s]]}-仅有简繁差异；请管理员复查页面历史记录，合并差异[[Category:Njzjzbot/A2]]}}\n" % (title_v, title) + page_v.text
+                reason = "A2"
+                page_v.text = "<noinclude>{{delete|A2|c1=[[User:Njzjzbot/task2|Njzjzbot]]发现-{'''%s'''}-与-{[[%s]]}-仅有简繁差异；请管理员复查页面历史记录，合并差异[[Category:Njzjzbot/A2]]}}</noinclude>\n" % (title_v, title) + page_v.text
             else:
                 # duplicated redirects R1
                 if variant in ('zh-cn', 'zh-hans') and page_v.getRedirectTarget() == page:
@@ -59,12 +60,13 @@ def check_page(page: Page, site: Site, user: str):
                 if convert_for_mw(title_v, 'zh-cn') != convert_for_mw(title, 'zh-cn') and page_v.getRedirectTarget() == page:
                     # technical issue
                     continue
-                page_v.text = "{{delete|R1|c1=[[User:Njzjzbot/task2|Njzjzbot]]发现-{'''%s'''}-与-{[[%s]]}-仅有简繁差异[[Category:Njzjzbot/R1]]}}\n" % (title_v, title) + page_v.text
+                reason = "R1"
+                page_v.text = "{{delete|R1|c1=[[User:Njzjzbot/task2|Njzjzbot]]发现-{'''%s'''}-与-{[[:%s]]}-仅有简繁差异[[Category:Njzjzbot/R1]]}}\n" % (title_v, title) + page_v.text
             page_v.save("[[User:Njzjzbot/task2|标记速删模板]]：[[%s]]与[[%s]]仅有简繁差异" % (title_v, title))
-            logging(site, user, title, title_v)
+            logging(site, user, title, title_v, reason=reason)
 
 
-def logging(site: Site, user: str, title: str, title_v: str) -> None:
+def logging(site: Site, user: str, title: str, title_v: str, reason: str = "") -> None:
     """Logging.
     
     Parameters
@@ -77,15 +79,17 @@ def logging(site: Site, user: str, title: str, title_v: str) -> None:
         title of the scanned page
     title_v : str
         title of the modified page
+    reason : str
+        reason
     """
     page = get_page("User:%s/check_duplicated_log" % user, site)
     if len(page.text.split("\n")) > 2000:
         page = archieve_page(page, site)
-    page.text += "\n# [[%s]] - 删除[[%s]] - ~~~~~" % (title, title_v)
+    page.text += "\n# -{[[:%s]]}- - 删除-{[[:%s]]}- - %s - ~~~~~" % (title, title_v, reason)
     page.save("[[User:Njzjzbot/task2|记录标记速删模板的条目]]")
 
 
-def main(user: str, password: str, restart: bool=False):
+def main(user: str, password: str, restart: bool=False, namespace: int=0):
     """Start checking duplicated pages.
     
     Parameters
@@ -96,17 +100,19 @@ def main(user: str, password: str, restart: bool=False):
         password of the bot
     restart : bool, default=False
         restart from the last modified page (requires logs exsiting)
+    namespace : int, default=0
+        namespace
     """
     site = login(user, password)
     if restart:
         # read from last page
         logging_page = get_page("User:%s/check_duplicated_log" % user, site)
         last_item = logging_page.text.strip().split("\n")[-1]
-        title = last_item.split("-")[0].strip()[4:-2]
+        title = last_item.split("-")[0].strip()[7:-4]
         qwlogger.info("restart from %s" % title)
-        all_pages = site.allpages(start=title)
+        all_pages = site.allpages(start=title, namespace=namespace)
     else:
-        all_pages = site.allpages()
+        all_pages = site.allpages(namespace=namespace)
     with logging_redirect_tqdm():
         for page in tqdm(all_pages, desc="Scanned pages"):
             if page.isRedirectPage():
