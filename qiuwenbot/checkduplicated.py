@@ -61,7 +61,7 @@ def check_page(page: Page, site: Site, user: str):
                     # technical issue
                     continue
                 reason = "R1"
-                page_v.text = "{{delete|R1|c1=[[User:Njzjzbot/task2|Njzjzbot]]发现-{'''%s'''}-与-{[[:%s]]}-仅有简繁差异[[Category:Njzjzbot/R1]]}}\n" % (title_v, title) + page_v.text
+                page_v.text = "<noinclude>{{delete|R1|c1=[[User:Njzjzbot/task2|Njzjzbot]]发现-{'''%s'''}-与-{[[:%s]]}-仅有简繁差异[[Category:Njzjzbot/R1]]}}</noinclude>\n" % (title_v, title) + page_v.text
             page_v.save("[[User:Njzjzbot/task2|标记速删模板]]：[[%s]]与[[%s]]仅有简繁差异" % (title_v, title))
             logging(site, user, title, title_v, reason=reason)
 
