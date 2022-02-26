@@ -41,7 +41,7 @@ def logging(site: Site, user: str, title: str, n: int) -> None:
     if len(page.text.split("\n")) > 2000:
         page = archieve_page(page, site)
     page.text += "\n# [[%s]] - replaced %d flags - ~~~~~" % (title, n)
-    page.save("[[User:Njzjzbot/task1|记录替换旗帜的条目]]")
+    page.save("[[User:Njzjzbot/task1|机器人：记录替换旗帜的条目]]")
 
 
 def clean_roc(site: Site, user: str):
@@ -140,7 +140,7 @@ def clean_roc(site: Site, user: str):
                     n += n1
                 if n:
                     try:
-                        page.save(("[[User:Njzjzbot/task1|替换%d个非法旗帜]] - " % n) + reason)
+                        page.save(("[[User:Njzjzbot/task1|机器人：替换%d个非法旗帜]] - " % n) + reason)
                     except:
                         continue
                     logging(site, user, page.title(), n)

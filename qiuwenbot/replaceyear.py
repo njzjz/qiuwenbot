@@ -14,44 +14,50 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
-from bs4 import BeautifulSoup
+import re
 from tqdm import tqdm
 from tqdm.contrib.logging import logging_redirect_tqdm
 from pywikibot import Site
-from typing import Tuple
 
 from .bot import login, get_page
 from .qwlogger import qwlogger
 from .utils import archieve_page
 
 
-def remove_timeline(text: str, user: str = "") -> Tuple[str, int]:
-    """Remove <timeline> from the wiki text.
-
+def replace_year(string: str) -> str:
+    """Replace ROC year from a string.
+    
     Parameters
     ----------
-    text : str
-        original wiki text
-    user : str
-        username of the bot
-
+    string : str
+        string to be replaced
+    
     Returns
     -------
     str
-        new wiki text
-    int
-        number of removed tags
+        string that has been replaced
     """
-    bs = BeautifulSoup(text, features='lxml')
-    timelines = bs.find_all("timeline")
-    for tl in timelines:
-        text = text.replace(
-            str(tl.encode(formatter=None), 'utf-8'), "<!-- removed_timeline by %s -->" % (user))
-    return text, len(timelines)
+    re_roc_year = re.compile(r'(((\[\[([^\[\]]*\|)?(中(华|華))?民(国|國)\]\])|((中(华|華))?民(国|國)))(\d+)年)')
+    # group 0 is the entire string, group -1 is the year
+    matched = re_roc_year.findall(string)
+    for mm in matched:
+        roc_year = int(mm[-1])
+        # 38 - 1949
+        if roc_year > 38:
+            ce_year = 1911 + roc_year
+            entire_year_str = mm[0]
+            ce_year_str = "%d年" % ce_year
+            string = string.replace(entire_year_str, ce_year_str)
+            # remove duplicate
+            # first remove links
+            string = string.replace("[[%s]]" % ce_year_str, ce_year_str)
+            string = string.replace("%s（%s）" % (ce_year_str, ce_year_str), ce_year_str)
+            string = string.replace("%s(%s)" % (ce_year_str, ce_year_str), ce_year_str)
+    return string
 
 
-def logging(site: Site, user: str, title: str, n: int) -> None:
-    """Logging the removing operator.
+def logging(site: Site, user: str, title: str) -> None:
+    """Logging the replacing year.
     
     Parameters
     ----------
@@ -61,18 +67,16 @@ def logging(site: Site, user: str, title: str, n: int) -> None:
         username of the bot
     title : str
         title of the modified page
-    n : int
-        number of removed references
     """
-    page = get_page("User:%s/removed_timelines_log" % user, site)
+    page = get_page("User:%s/replace_year_log" % user, site)
     if len(page.text.split("\n")) > 2000:
         page = archieve_page(page, site)
-    page.text += "\n# [[%s]] - removed %d timelines - ~~~~~" % (title, n)
-    page.save("[[User:Njzjzbot/task3|机器人：记录移除timeline的条目]]")
+    page.text += "\n# [[%s]] - ~~~~~" % title
+    page.save("[[User:Njzjzbot/task4|机器人：记录替换非法纪年的条目]]")
 
 
 def main(user: str, password: str, restart: bool=False):
-    """Start removing timeline task.
+    """Start replacing year.
     
     Parameters
     ----------
@@ -86,7 +90,7 @@ def main(user: str, password: str, restart: bool=False):
     site = login(user, password)
     if restart:
         # read from last page
-        logging_page = get_page("User:%s/removed_timelines_log" % user, site)
+        logging_page = get_page("User:%s/replace_year_log" % user, site)
         last_item = logging_page.text.strip().split("\n")[-1]
         title = last_item.split("-")[0].strip()[4:-2]
         qwlogger.info("restart from %s" % title)
@@ -95,23 +99,21 @@ def main(user: str, password: str, restart: bool=False):
         all_pages = site.allpages()
     
     with logging_redirect_tqdm():
-        n_removed = tqdm(position=2, desc="Removed refs")
         n_modified = tqdm(position=1, desc="Modified pages")
         for page in tqdm(all_pages, desc="Scanned pages"):
             if page.isRedirectPage():
                 continue
             try:
-                new_text, n = remove_timeline(page.text, user=user)
+                new_text = replace_year(page.text)
             except:
                 qwlogger.error("%s parsed error!!" % page.title())
-                new_text, n = page.text, 0
-            if n:
+                new_text = page.text
+            if new_text != page.text:
                 page.text = new_text
                 try:
-                    page.save("[[User:Njzjzbot/task3|机器人：移除%d个timeline标签]]" % n)
+                    page.save("[[User:Njzjzbot/task4|机器人：替换非法纪年]]")
                 except:
                     pass
-                n_removed.update(n)
                 n_modified.update(1)
                 # log
-                logging(site, user, page.title(), n)
+                logging(site, user, page.title())

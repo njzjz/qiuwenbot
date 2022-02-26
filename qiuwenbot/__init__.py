@@ -28,5 +28,8 @@ from .cleanrefs import main as clean_refs
 from .replaceroc import main as replace_roc
 from .checkduplicated import main as check_duplicated_pages
 from .removetimeline import main as remove_timeline
+from .replaceyear import main as replace_year
 
-__all__ = ['clean_refs', 'replace_roc', 'check_duplicated_pages', 'remove_timeline']
+__all__ = ['clean_refs', 'replace_roc', 'check_duplicated_pages', 'remove_timeline',
+           'replace_year',
+    ]

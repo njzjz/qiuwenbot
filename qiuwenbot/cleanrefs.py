@@ -99,7 +99,7 @@ def logging(site: Site, user: str, title: str, n: int) -> None:
     if len(page.text.split("\n")) > 2000:
         page = archieve_page(page, site)
     page.text += "\n# [[%s]] - removed %d refs - ~~~~~" % (title, n)
-    page.save("[[User:Njzjzbot/task0|记录移除参考文献的条目]]")
+    page.save("[[User:Njzjzbot/task0|机器人：记录移除参考文献的条目]]")
 
 
 def main(user: str, password: str, restart: bool=False):
@@ -140,7 +140,7 @@ def main(user: str, password: str, restart: bool=False):
             if n:
                 page.text = new_text
                 try:
-                    page.save("[[User:Njzjzbot/task0|移除%d个参考文献]]" % n)
+                    page.save("[[User:Njzjzbot/task0|机器人：移除%d个参考文献]]" % n)
                 except:
                     pass
                 n_removed.update(n)
