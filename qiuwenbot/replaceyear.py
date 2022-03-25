@@ -15,6 +15,7 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 import re
+import cn2an
 from tqdm import tqdm
 from tqdm.contrib.logging import logging_redirect_tqdm
 from pywikibot import Site
@@ -37,13 +38,16 @@ def replace_year(string: str) -> str:
     str
         string that has been replaced
     """
-    re_roc_year = re.compile(r'(((\[\[([^\[\]]*\|)?(中(华|華))?民(国|國)\]\])|((中(华|華))?民(国|國)))(\d+)年)')
+    re_roc_year = re.compile(r'(((\[\[([^\[\]]*\|)?(中(华|華))?民(国|國)\]\])|((中(华|華))?民(国|國)))(\d+|[一二三四五六七八九十]+)年)')
     # group 0 is the entire string, group -1 is the year
     matched = re_roc_year.findall(string)
     for mm in matched:
-        roc_year = int(mm[-1])
+        try:
+            roc_year = int(mm[-1])
+        except ValueError:
+            roc_year = cn2an.cn2an(mm[-1])
         # 38 - 1949
-        if roc_year > 38:
+        if roc_year > 38 and roc_year < 1000:
             ce_year = 1911 + roc_year
             entire_year_str = mm[0]
             ce_year_str = "%d年" % ce_year
@@ -53,6 +57,8 @@ def replace_year(string: str) -> str:
             string = string.replace("[[%s]]" % ce_year_str, ce_year_str)
             string = string.replace("%s（%s）" % (ce_year_str, ce_year_str), ce_year_str)
             string = string.replace("%s(%s)" % (ce_year_str, ce_year_str), ce_year_str)
+            string = string.replace("%s（%s）" % (ce_year_str, str(ce_year)), ce_year_str)
+            string = string.replace("%s(%s)" % (ce_year_str, str(ce_year)), ce_year_str)
     return string
 
 

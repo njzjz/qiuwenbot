@@ -59,18 +59,22 @@ def clean_roc(site: Site, user: str):
     # compiled res
     re_birth = re.compile(r'Category:(\d+)年出生')
     re_death = re.compile(r'Category:(\d+)年逝世')
-    re_found = re.compile(r'Category:(\d+)年(.*)(设立|建立|成立|创建|創建|設立)(.*)')
+    re_found = re.compile(r'Category:(\d+)年(.*)(设立|建立|成立|创建|創建|設立|启用|啟用)(.*)')
     re_event = re.compile(r'Category:(\d+)年(台灣)(.*)')
 
     re_roc = re.compile(r'({{[\s]*ROC[\s]*}})')
-    re_nationality = re.compile(r'\|[\s]*(國籍|国籍|nationality)[\s]*=[\s]*({{[\s]*ROC[\s]*}})')
-    re_death_place = re.compile(r'\|[\s]*(逝世地點|逝世地点|death_place|place_of_death|resting_place)[\s]*=[\s]*({{[\s]*ROC[\s]*}})')
+    re_roc_flagicon = re.compile(r'({{[\s]*[Ff]lagicon[\s]*\|[\s]*ROC[\s]*}})')
+    re_nationality = re.compile(r'\|[\s]*(國籍|国籍|[Nn]ationality)[\s]*=[\s]*({{[\s]*ROC[\s]*}})')
+    re_death_place = re.compile(r'\|[\s]*(逝世地點|逝世地点|[Dd]eath_place|[Pp]lace_of_death|[Rr]esting_place)[\s]*=[\s]*({{[\s]*ROC[\s]*}})')
+    re_death_place_flagicon = re.compile(r'\|[\s]*(逝世地點|逝世地点|[Dd]eath_place|[Pp]lace_of_death|[Rr]esting_place)[\s]*=[\s]*({{[\s]*flagicon[\s]*\|[\s]*ROC[\s]*}})')
 
     comment = "<!-- replaced_flag 0 by %s -->" % user
     replaced_chn = r"{{CHN}}" + comment
+    replaced_chn_flagicon = r"{{flagicon|CHN}}" + comment
     replaced_chn_nationality = r"|\1={{PRC-TWN}}" + comment
     replaced_chn_no_flag = r"|\1=[[中国]]" + comment
     replaced_death_place = r"|\1={{CHN}}" + comment
+    replaced_death_place_flagicon = r"|\1={{flagicon|CHN}}" + comment
 
     with logging_redirect_tqdm():
         n_replaced = tqdm(position=2, desc="Replaced flags")
@@ -132,9 +136,19 @@ def clean_roc(site: Site, user: str):
                     except:
                         continue
                     n += n1
+                    try:
+                        page.text, n1 = re_death_place_flagicon.subn(replaced_death_place_flagicon, page.text)
+                    except:
+                        continue
+                    n += n1
                 if replace_all:
                     try:
                         page.text, n1 = re_roc.subn(replaced_chn, page.text)
+                    except:
+                        continue
+                    n += n1
+                    try:
+                        page.text, n1 = re_roc_flagicon.subn(replaced_chn_flagicon, page.text)
                     except:
                         continue
                     n += n1
