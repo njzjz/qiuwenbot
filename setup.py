@@ -19,5 +19,5 @@ setup(
     name="qiuwenbot",
     version="0.0.2",
     packages=['qiuwenbot'],
-    install_requires=['bs4', 'pywikibot', 'requests', 'zhconv'],
+    install_requires=['bs4', 'pywikibot', 'requests', 'zhconv', 'cn2an'],
 )

@@ -14,7 +14,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
-from bs4 import BeautifulSoup
+import re
 from tqdm import tqdm
 from tqdm.contrib.logging import logging_redirect_tqdm
 from pywikibot import Site
@@ -23,6 +23,9 @@ from typing import Tuple
 from .bot import login, get_page
 from .qwlogger import qwlogger
 from .utils import archieve_page
+
+
+rerefs = re.compile(r'(?is)<ref(?P<params>[^>/]*)>(?P<content>.*?)</ref>')
 
 
 def get_removed_urls(user: str, site: Site) -> list:
@@ -65,10 +68,9 @@ def clean_refs(text: str, removed_urls: list, user: str = "") -> Tuple[str, int]
     int
         number of removed references
     """
-    bs = BeautifulSoup(text, features='lxml')
-    refs = bs.find_all("ref")
     n = 0
-    for ref in refs:
+    for match in rerefs.finditer(text):
+        ref = match.group('content')
         removed = tuple((url in str(ref) for url in removed_urls))
         try:
             ii = removed.index(True)
@@ -77,7 +79,7 @@ def clean_refs(text: str, removed_urls: list, user: str = "") -> Tuple[str, int]
         else:
             n += 1
             text = text.replace(
-                str(ref.encode(formatter=None), 'utf-8'), "<!-- removed_ref site%d by %s -->" % (ii, user))
+                match.group(), "<!-- removed_ref site%d by %s -->" % (ii, user))
     return text, n
 
 
@@ -135,7 +137,7 @@ def main(user: str, password: str, restart: bool=False):
             try:
                 new_text, n = clean_refs(page.text, removed_urls, user=user)
             except:
-                qwlogger.error("%s parsed error!!" % page.title())
+                qwlogger.exception("%s parsed error!!" % page.title())
                 new_text, n = page.text, 0
             if n:
                 page.text = new_text
