@@ -21,7 +21,7 @@ class QiuwenFamily(family.Family):
     """Qiuwen faimily"""
     name = 'qiuwen'
     langs = {
-        'zh': 'zhqw.qiuwen.wiki'
+        'zh': 'www.qiuwen.wiki'
     }
 
     def scriptpath(self, code):
