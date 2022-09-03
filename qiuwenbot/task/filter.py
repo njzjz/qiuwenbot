@@ -51,5 +51,5 @@ class FilterTask(Task):
         if new_text == text:
             return False
         page.text = new_text
-        page.save(filter.log)
+        page.save(self.filter.log)
         return True

@@ -73,9 +73,9 @@ class Task(metaclass=ABCMeta):
         """
         if self.logging_page is not None:
             if len(self.logging_page.text.split("\n")) > 2000:
-                page = archieve_page(page, self.site)
-            page.text += "\n# [[%s]] - ~~~~~" % title
-            page.save(self.summary)
+                self.logging_page = archieve_page(self.logging_page, self.site)
+            self.logging_page.text += "\n# [[%s]] - ~~~~~" % title
+            self.logging_page.save(self.summary)
 
     def submit(self):
         """Submit the task."""
