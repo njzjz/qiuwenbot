@@ -16,7 +16,7 @@
 #
 import re
 from abc import ABCMeta, abstractmethod
-from typing import Tuple, Union
+from typing import Tuple, Union, List
 
 
 class Filter(metaclass=ABCMeta):
@@ -98,7 +98,7 @@ class FilterChain(Filter):
     filters : list of Filter
         Filters to apply.
     """
-    def __init__(self, filters: list[Filter]) -> None:
+    def __init__(self, filters: List[Filter]) -> None:
         super().__init__()
         self.filters = [filter() for filter in filters]
         self.active_filters = []
