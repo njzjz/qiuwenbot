@@ -15,7 +15,6 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 from abc import ABCMeta, abstractmethod
-from typing import Generator
 
 from tqdm import tqdm
 from tqdm.contrib.logging import logging_redirect_tqdm
@@ -34,7 +33,7 @@ class Task(metaclass=ABCMeta):
         Username.
     password : str
         Password.
-    pages : Generator[Page]
+    pages : dict
         Pages to operate.
     logging_page : str, optional
         Page to log the task, by default None
@@ -44,12 +43,15 @@ class Task(metaclass=ABCMeta):
     def __init__(self,
                  user: str,
                  password: str,
-                 pages: Generator[Page],
+                 pages: dict,
                  logging_page: str = None,
                  summary: str = ""):
         """Initialize."""
         self.site = login(user, password)
-        self.pages = pages
+        if pages['type'] == 'all':
+            self.pages = self.site.allpages(namespace=pages.get('namespace', 0))
+        else:
+            raise RuntimeError("Unsupported pages type")
         if logging_page is not None:
             self.logging_page = get_page(logging_page, self.site)
         else:
