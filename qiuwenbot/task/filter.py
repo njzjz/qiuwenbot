@@ -16,6 +16,7 @@
 #
 from typing import Generator
 
+from pywikibot import Page
 from .task import Task
 from ..filter.filter import FilterChain, default_filters
 
