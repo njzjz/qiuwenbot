@@ -25,8 +25,6 @@ class FilterTask(Task):
     
     Parameters
     ----------
-    site : Site
-        Site to operate.
     user : str
         Username.
     password : str
@@ -39,13 +37,12 @@ class FilterTask(Task):
         Summary of the task, by default emptry string
     """
     def __init__(self,
-                 site: Site,
                  user: str,
                  password: str,
                  pages: Generator[Page],
                  logging_page: str = None):
         """Initialize."""
-        super().__init__(site, user, password, pages,
+        super().__init__(user, password, pages,
                          r"User:%s/filter_log" % user,
                          "综合治理",
                          )

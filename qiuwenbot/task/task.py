@@ -29,8 +29,6 @@ class Task(metaclass=ABCMeta):
     
     Parameters
     ----------
-    site : Site
-        Site to operate.
     user : str
         Username.
     password : str
@@ -43,16 +41,13 @@ class Task(metaclass=ABCMeta):
         Summary of the task, by default emptry string
     """
     def __init__(self,
-                 site: Site,
                  user: str,
                  password: str,
                  pages: Generator[Page],
                  logging_page: str = None,
                  summary: str = ""):
         """Initialize."""
-        self.site = site
-        site.user = user
-        login(user, password)
+        self.site = login(user, password)
         self.pages = pages
         if logging_page is not None:
             self.logging_page = get_page(logging_page, self.site)
