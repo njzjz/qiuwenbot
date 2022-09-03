@@ -18,6 +18,7 @@ from abc import ABCMeta, abstractmethod
 from typing import Generator
 
 from tqdm import tqdm
+from tqdm.contrib.logging import logging_redirect_tqdm
 from pywikibot import Page
 
 from ..bot import login, get_page
@@ -76,8 +77,9 @@ class Task(metaclass=ABCMeta):
 
     def submit(self):
         """Submit the task."""
-        n_modified = tqdm(position=1, desc="Modified pages")
-        for page in tqdm(self.pages, desc="Scanned pages"):
-            if self.do(page):
-                n_modified.update(1)
-                self.logging(page.title())
+        with logging_redirect_tqdm():
+            n_modified = tqdm(position=1, desc="Modified pages")
+            for page in tqdm(self.pages, desc="Scanned pages"):
+                if self.do(page):
+                    n_modified.update(1)
+                    self.logging(page.title())
