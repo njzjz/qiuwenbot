@@ -15,7 +15,7 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 from typing import Generator
-from pywikibot import Site, Page
+from pywikibot import Page
 
 from .task import Task
 from ..filter.filter import FilterChain, default_filters
@@ -31,16 +31,12 @@ class FilterTask(Task):
         Password.
     pages : Generator[Page]
         Pages to operate.
-    logging_page : str, optional
-        Page to log the task, by default None
-    summary : str, optional
-        Summary of the task, by default emptry string
     """
     def __init__(self,
                  user: str,
                  password: str,
-                 pages: Generator[Page],
-                 logging_page: str = None):
+                 pages: Generator[Page]
+                 ):
         """Initialize."""
         super().__init__(user, password, pages,
                          r"User:%s/filter_log" % user,

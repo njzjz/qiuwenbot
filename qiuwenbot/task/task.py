@@ -18,7 +18,7 @@ from abc import ABCMeta, abstractmethod
 from typing import Generator
 
 from tqdm import tqdm
-from pywikibot import Page, Site
+from pywikibot import Page
 
 from ..bot import login, get_page
 from ..utils import archieve_page
