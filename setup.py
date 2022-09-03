@@ -14,10 +14,10 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
-from setuptools import setup
+from setuptools import setup, find_packages
 setup(
     name="qiuwenbot",
     version="0.0.2",
-    packages=['qiuwenbot'],
+    packages=find_packages(),
     install_requires=['bs4', 'pywikibot', 'requests', 'zhconv', 'cn2an'],
 )

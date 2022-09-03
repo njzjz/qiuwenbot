@@ -14,20 +14,17 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
-# set pywikibot environment
-import tempfile
-import shutil
-import os
+import importlib
+from pathlib import Path
+try:
+    from importlib import metadata
+except ImportError: # for Python<3.8
+    import importlib_metadata as metadata
 
-tmp_dir = tempfile.mkdtemp(prefix="qiuwenbot")
-# copy user-config.py
-shutil.copyfile(os.path.join(os.path.dirname(__file__), "user-config.py"), os.path.join(tmp_dir, "user-config.py"))
-os.environ['PYWIKIBOT_DIR']=tmp_dir
+PACKAGE_BASE = "qiuwenbot.filter"
+NOT_LOADABLE = ("__init__.py",)
 
-from .replaceroc import main as replace_roc
-from .checkduplicated import main as check_duplicated_pages
-
-__all__ = [
-    'replace_roc',
-    'check_duplicated_pages',
-]
+for module_file in Path(__file__).parent.glob("*.py"):
+    if module_file.name not in NOT_LOADABLE:
+        module_name = f".{module_file.stem}"
+        importlib.import_module(module_name, PACKAGE_BASE)
