@@ -14,20 +14,6 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
-# set pywikibot environment
-import tempfile
-import shutil
-import os
-
-tmp_dir = tempfile.mkdtemp(prefix="qiuwenbot")
-# copy user-config.py
-shutil.copyfile(os.path.join(os.path.dirname(__file__), "user-config.py"), os.path.join(tmp_dir, "user-config.py"))
-os.environ['PYWIKIBOT_DIR']=tmp_dir
-
-from .replaceroc import main as replace_roc
-from .checkduplicated import main as check_duplicated_pages
-
-__all__ = [
-    'replace_roc',
-    'check_duplicated_pages',
-]
+def get_comment(comment: str) -> str:
+    """Get comment inserted into wikitext."""
+    return f"<!-- {comment} by njzjz/qiuwenbot -->"

@@ -14,20 +14,21 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
-# set pywikibot environment
-import tempfile
-import shutil
-import os
+from .filter import TextReplaceFilter, register_filter
 
-tmp_dir = tempfile.mkdtemp(prefix="qiuwenbot")
-# copy user-config.py
-shutil.copyfile(os.path.join(os.path.dirname(__file__), "user-config.py"), os.path.join(tmp_dir, "user-config.py"))
-os.environ['PYWIKIBOT_DIR']=tmp_dir
+@register_filter
+class WengeFilter(TextReplaceFilter):
+    """Filter to add quote to Wen Ge.
+    """
 
-from .replaceroc import main as replace_roc
-from .checkduplicated import main as check_duplicated_pages
+    def __init__(self):
+        super().__init__(
+            # not starts with quote
+            # only replace links as there is something like 马文革
+            r'([^“‘「『\[])((\[\[([^\[\]\|]+\|)?)(文革|文化大革命)(\]\]))',
+            r'\1“\2”',
+            )
 
-__all__ = [
-    'replace_roc',
-    'check_duplicated_pages',
-]
+    @property
+    def log(self) -> str:
+        return '文革加引号'
