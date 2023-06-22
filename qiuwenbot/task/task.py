@@ -20,6 +20,7 @@ from tqdm import tqdm
 from tqdm.contrib.logging import logging_redirect_tqdm
 from pywikibot import Page
 
+from ..qwlogger import qwlogger
 from ..bot import login, get_page
 from ..utils import archieve_page
 
@@ -48,14 +49,20 @@ class Task(metaclass=ABCMeta):
                  summary: str = ""):
         """Initialize."""
         self.site = login(user, password)
-        if pages['type'] == 'all':
-            self.pages = self.site.allpages(namespace=pages.get('namespace', 0))
-        else:
-            raise RuntimeError("Unsupported pages type")
         if logging_page is not None:
             self.logging_page = get_page(logging_page, self.site)
         else:
             self.logging_page = None
+        if pages['type'] == 'all':
+            if pages.get('restart', False):
+                last_item = self.logging_page.text.strip().split("\n")[-1]
+                title = last_item.split("-")[0].strip()[4:-2]
+                qwlogger.info("restart from %s" % title)
+            else:
+                title = ""
+            self.pages = self.site.allpages(namespace=pages.get('namespace', 0), start=title)
+        else:
+            raise RuntimeError("Unsupported pages type")
         self.summary = summary
 
     @abstractmethod

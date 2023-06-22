@@ -16,6 +16,7 @@
 #
 from typing import Generator
 
+import pywikibot
 from pywikibot import Page
 from .task import Task
 from ..filter.filter import FilterChain, default_filters
@@ -51,5 +52,8 @@ class FilterTask(Task):
         if new_text == text:
             return False
         page.text = new_text
-        page.save(self.filter.log)
+        try:
+            page.save(self.filter.log)
+        except (pywikibot.exceptions.LockedPageError, pywikibot.exceptions.EditConflictError, pywikibot.exceptions.SpamblacklistError):
+            return False
         return True

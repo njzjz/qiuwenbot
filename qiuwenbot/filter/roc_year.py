@@ -56,7 +56,10 @@ class ReplaceROCyear(Filter):
             try:
                 roc_year = int(mm[-1])
             except ValueError:
-                roc_year = cn2an.cn2an(mm[-1])
+                try:
+                    roc_year = cn2an.cn2an(mm[-1])
+                except ValueError:
+                    continue
             # 38 - 1949; prevent conversion of 民国19xx年
             if roc_year > 38 and roc_year < 1000:
                 ce_year = 1911 + roc_year
