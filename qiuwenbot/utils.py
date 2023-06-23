@@ -15,18 +15,20 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 import pywikibot
+
 from .bot import get_page
+
 
 def archieve_page(page: pywikibot.Page, site: pywikibot.Site) -> pywikibot.Page:
     """Archieve a page.
-    
+
     Parameters
     ----------
     page: pywikibot.Page
         page to archieve
     site: pywikibot.Site
         qiuwen site
-    
+
     Returns
     -------
     pywikibot.Page

@@ -15,9 +15,10 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 import logging
+
 qwlogger = logging.getLogger("QiuwenBot")
 qwlogger.setLevel(logging.INFO)
 ch = logging.StreamHandler()
 qwlogger.addHandler(ch)
 
-__all__ = ['qwlogger']
+__all__ = ["qwlogger"]

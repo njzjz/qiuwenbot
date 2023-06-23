@@ -16,19 +16,19 @@
 #
 from .filter import TextReplaceFilter, register_filter
 
+
 @register_filter
 class WengeFilter(TextReplaceFilter):
-    """Filter to add quote to Wen Ge.
-    """
+    """Filter to add quote to Wen Ge."""
 
     def __init__(self):
         super().__init__(
             # not starts with quote
             # only replace links as there is something like 马文革
-            r'([^“‘「『\[])((\[\[([^\[\]\|]+\|)?)(文革|文化大革命)(\]\]))',
-            r'\1“\2”',
-            )
+            r"([^“‘「『\[])((\[\[([^\[\]\|]+\|)?)(文革|文化大革命)(\]\]))",
+            r"\1“\2”",
+        )
 
     @property
     def log(self) -> str:
-        return '文革加引号'
+        return "文革加引号"

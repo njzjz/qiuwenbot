@@ -16,10 +16,11 @@
 #
 import importlib
 from pathlib import Path
+
 try:
     from importlib import metadata
-except ImportError: # for Python<3.8
-    import importlib_metadata as metadata
+except ImportError:  # for Python<3.8
+    pass
 
 PACKAGE_BASE = "qiuwenbot.filter"
 NOT_LOADABLE = ("__init__.py",)

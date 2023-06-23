@@ -14,23 +14,25 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
-"""This module is aimmed to check duplicated page with different variants 
-of Chinese titles, such as zh-cn and zh-hk."""
-from zhconv import convert_for_mw
-from pywikibot import Site, Page
+"""This module is aimmed to check duplicated page with different variants
+of Chinese titles, such as zh-cn and zh-hk.
+"""
+from pywikibot import Page, Site
 from tqdm import tqdm
 from tqdm.contrib.logging import logging_redirect_tqdm
+from zhconv import convert_for_mw
 
+from .bot import get_page, login
 from .qwlogger import qwlogger
-from .bot import login, get_page
 from .utils import archieve_page
 
-#variants = ("zh-cn", "zh-tw", "zh-hk")
+# variants = ("zh-cn", "zh-tw", "zh-hk")
 variants = ("zh-hans", "zh-hant")
+
 
 def check_page(page: Page, site: Site, user: str):
     """Check if a page has duplicated variants.
-    
+
     arameters
     ----------
     page: pywikibot.Page
@@ -46,29 +48,45 @@ def check_page(page: Page, site: Site, user: str):
         page_v = get_page(title_v, site)
         if page_v != page and page_v.exists():
             if not page_v.isRedirectPage():
-                if page.text.startswith("<noinclude>{{delete|") or page_v.text.startswith("<noinclude>{{delete|"):
+                if page.text.startswith(
+                    "<noinclude>{{delete|"
+                ) or page_v.text.startswith("<noinclude>{{delete|"):
                     # has been marked to delete
                     continue
                 # duplicated pages A2
                 reason = "A2"
-                page_v.text = "<noinclude>{{delete|A2|c1=[[User:Njzjzbot/task2|Njzjzbot]]发现-{'''%s'''}-与-{[[%s]]}-仅有简繁差异；请管理员复查页面历史记录，合并差异[[Category:Njzjzbot/A2]]}}</noinclude>\n" % (title_v, title) + page_v.text
+                page_v.text = (
+                    f"<noinclude>{{{{delete|A2|c1=[[User:Njzjzbot/task2|Njzjzbot]]发现-{{'''{title_v}'''}}-与-{{[[{title}]]}}-仅有简繁差异；请管理员复查页面历史记录，合并差异[[Category:Njzjzbot/A2]]}}}}</noinclude>\n"
+                    + page_v.text
+                )
             else:
                 # duplicated redirects R1
-                if variant in ('zh-cn', 'zh-hans') and page_v.getRedirectTarget() == page:
+                if (
+                    variant in ("zh-cn", "zh-hans")
+                    and page_v.getRedirectTarget() == page
+                ):
                     # do not process zh-hans redirect, otherwise it is wrong
                     continue
-                if convert_for_mw(title_v, 'zh-cn') != convert_for_mw(title, 'zh-cn') and page_v.getRedirectTarget() == page:
+                if (
+                    convert_for_mw(title_v, "zh-cn") != convert_for_mw(title, "zh-cn")
+                    and page_v.getRedirectTarget() == page
+                ):
                     # technical issue
                     continue
                 reason = "R1"
-                page_v.text = "<noinclude>{{delete|R1|c1=[[User:Njzjzbot/task2|Njzjzbot]]发现-{'''%s'''}-与-{[[:%s]]}-仅有简繁差异[[Category:Njzjzbot/R1]]}}</noinclude>\n" % (title_v, title) + page_v.text
-            page_v.save("[[User:Njzjzbot/task2|标记速删模板]]：[[%s]]与[[%s]]仅有简繁差异" % (title_v, title))
+                page_v.text = (
+                    f"<noinclude>{{{{delete|R1|c1=[[User:Njzjzbot/task2|Njzjzbot]]发现-{{'''{title_v}'''}}-与-{{[[:{title}]]}}-仅有简繁差异[[Category:Njzjzbot/R1]]}}}}</noinclude>\n"
+                    + page_v.text
+                )
+            page_v.save(
+                f"[[User:Njzjzbot/task2|标记速删模板]]：[[{title_v}]]与[[{title}]]仅有简繁差异"
+            )
             logging(site, user, title, title_v, reason=reason)
 
 
 def logging(site: Site, user: str, title: str, title_v: str, reason: str = "") -> None:
     """Logging.
-    
+
     Parameters
     ----------
     site : pywikibot.Site
@@ -85,13 +103,13 @@ def logging(site: Site, user: str, title: str, title_v: str, reason: str = "") -
     page = get_page("User:%s/check_duplicated_log" % user, site)
     if len(page.text.split("\n")) > 2000:
         page = archieve_page(page, site)
-    page.text += "\n# -{[[:%s]]}- - 删除-{[[:%s]]}- - %s - ~~~~~" % (title, title_v, reason)
+    page.text += f"\n# -{{[[:{title}]]}}- - 删除-{{[[:{title_v}]]}}- - {reason} - ~~~~~"
     page.save("[[User:Njzjzbot/task2|记录标记速删模板的条目]]")
 
 
-def main(user: str, password: str, restart: bool=False, namespace: int=0):
+def main(user: str, password: str, restart: bool = False, namespace: int = 0):
     """Start checking duplicated pages.
-    
+
     Parameters
     ----------
     user : str
