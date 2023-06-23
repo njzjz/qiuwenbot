@@ -16,6 +16,7 @@ dependencies = [
   'requests',
   'zhconv',
   'cn2an',
+  'tqdm',
 ]
 requires-python = ">=3.7"
 
