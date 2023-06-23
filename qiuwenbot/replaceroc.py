@@ -25,7 +25,7 @@ from .utils import archieve_page
 
 
 def logging(site: Site, user: str, title: str, n: int) -> None:
-    """Logging the removing operator.
+    """Log the removing operator.
 
     Parameters
     ----------
