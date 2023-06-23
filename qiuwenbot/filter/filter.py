@@ -147,7 +147,7 @@ default_filters = []
 
 
 def register_filter(cls: Filter) -> Filter:
-    """Decorator to register filter.
+    """Return a decorator to register filter.
 
     The filter should not have any parameters in its constructor.
 

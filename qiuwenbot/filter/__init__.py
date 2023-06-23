@@ -14,13 +14,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
+"""Filter texts."""
 import importlib
 from pathlib import Path
-
-try:
-    from importlib import metadata
-except ImportError:  # for Python<3.8
-    pass
 
 PACKAGE_BASE = "qiuwenbot.filter"
 NOT_LOADABLE = ("__init__.py",)

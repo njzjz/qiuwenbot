@@ -76,7 +76,7 @@ class Task(metaclass=ABCMeta):
         raise NotImplementedError
 
     def logging(self, title: str) -> None:
-        """Logging the removing operator.
+        """Log the removing operator.
 
         Parameters
         ----------

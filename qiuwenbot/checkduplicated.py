@@ -14,7 +14,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
-"""This module is aimmed to check duplicated page with different variants
+"""Check duplicated page with different variants
 of Chinese titles, such as zh-cn and zh-hk.
 """
 from pywikibot import Page, Site
@@ -85,7 +85,7 @@ def check_page(page: Page, site: Site, user: str):
 
 
 def logging(site: Site, user: str, title: str, title_v: str, reason: str = "") -> None:
-    """Logging.
+    """Log.
 
     Parameters
     ----------
@@ -137,7 +137,5 @@ def main(user: str, password: str, restart: bool = False, namespace: int = 0):
                 continue
             try:
                 check_page(page, site, user)
-            except KeyboardInterrupt:
-                raise
-            except:
+            except Exception:
                 pass

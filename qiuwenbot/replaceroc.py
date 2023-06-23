@@ -129,7 +129,7 @@ def clean_roc(site: Site, user: str):
                         page.text, n1 = re_nationality.subn(
                             replaced_chn_nationality, page.text
                         )
-                    except:
+                    except Exception:
                         continue
                     n += n1
                 if replace_nationality_no_flag:
@@ -138,7 +138,7 @@ def clean_roc(site: Site, user: str):
                         page.text, n1 = re_nationality.subn(
                             replaced_chn_no_flag, page.text
                         )
-                    except:
+                    except Exception:
                         continue
                     n += n1
                 if replace_death:
@@ -146,27 +146,27 @@ def clean_roc(site: Site, user: str):
                         page.text, n1 = re_death_place.subn(
                             replaced_death_place, page.text
                         )
-                    except:
+                    except Exception:
                         continue
                     n += n1
                     try:
                         page.text, n1 = re_death_place_flagicon.subn(
                             replaced_death_place_flagicon, page.text
                         )
-                    except:
+                    except Exception:
                         continue
                     n += n1
                 if replace_all:
                     try:
                         page.text, n1 = re_roc.subn(replaced_chn, page.text)
-                    except:
+                    except Exception:
                         continue
                     n += n1
                     try:
                         page.text, n1 = re_roc_flagicon.subn(
                             replaced_chn_flagicon, page.text
                         )
-                    except:
+                    except Exception:
                         continue
                     n += n1
                 if n:
@@ -174,7 +174,7 @@ def clean_roc(site: Site, user: str):
                         page.save(
                             ("[[User:Njzjzbot/task1|机器人：替换%d个非法旗帜]] - " % n) + reason
                         )
-                    except:
+                    except Exception:
                         continue
                     logging(site, user, page.title(), n)
                     n_replaced.update(n)
