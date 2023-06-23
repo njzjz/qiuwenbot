@@ -1,0 +1,16 @@
+on: push
+name: Test
+jobs:
+  testWithTox:
+    name: Test with tox
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        submodules: true
+    - uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+    - run: pip install tox
+    - run: tox
+    - uses: codecov/codecov-action@v3
