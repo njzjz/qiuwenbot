@@ -13,21 +13,24 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
-#
+"""Qiuwen bot."""
 # set pywikibot environment
-import tempfile
-import shutil
 import os
+import shutil
+import tempfile
 
 tmp_dir = tempfile.mkdtemp(prefix="qiuwenbot")
 # copy user-config.py
-shutil.copyfile(os.path.join(os.path.dirname(__file__), "user-config.py"), os.path.join(tmp_dir, "user-config.py"))
-os.environ['PYWIKIBOT_DIR']=tmp_dir
+shutil.copyfile(
+    os.path.join(os.path.dirname(__file__), "user-config.py"),
+    os.path.join(tmp_dir, "user-config.py"),
+)
+os.environ["PYWIKIBOT_DIR"] = tmp_dir
 
-from .replaceroc import main as replace_roc
 from .checkduplicated import main as check_duplicated_pages
+from .replaceroc import main as replace_roc
 
 __all__ = [
-    'replace_roc',
-    'check_duplicated_pages',
+    "replace_roc",
+    "check_duplicated_pages",
 ]

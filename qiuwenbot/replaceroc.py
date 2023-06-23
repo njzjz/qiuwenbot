@@ -15,17 +15,18 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 import re
+
 from pywikibot import Site
 from tqdm import tqdm
 from tqdm.contrib.logging import logging_redirect_tqdm
 
-from .bot import login, get_page
+from .bot import get_page, login
 from .utils import archieve_page
 
 
 def logging(site: Site, user: str, title: str, n: int) -> None:
-    """Logging the removing operator.
-    
+    """Log the removing operator.
+
     Parameters
     ----------
     site : pywikibot.Site
@@ -46,7 +47,7 @@ def logging(site: Site, user: str, title: str, n: int) -> None:
 
 def clean_roc(site: Site, user: str):
     """Replace ROC flags with PRC flags.
-    
+
     Parameters
     ----------
     site : pywikibot.Site
@@ -57,16 +58,22 @@ def clean_roc(site: Site, user: str):
     roc_template = get_page("Template:ROC", site)
 
     # compiled res
-    re_birth = re.compile(r'Category:(\d+)年出生')
-    re_death = re.compile(r'Category:(\d+)年逝世')
-    re_found = re.compile(r'Category:(\d+)年(.*)(设立|建立|成立|创建|創建|設立|启用|啟用)(.*)')
-    re_event = re.compile(r'Category:(\d+)年(台灣)(.*)')
+    re_birth = re.compile(r"Category:(\d+)年出生")
+    re_death = re.compile(r"Category:(\d+)年逝世")
+    re_found = re.compile(r"Category:(\d+)年(.*)(设立|建立|成立|创建|創建|設立|启用|啟用)(.*)")
+    re_event = re.compile(r"Category:(\d+)年(台灣)(.*)")
 
-    re_roc = re.compile(r'({{[\s]*ROC[\s]*}})')
-    re_roc_flagicon = re.compile(r'({{[\s]*[Ff]lagicon[\s]*\|[\s]*ROC[\s]*}})')
-    re_nationality = re.compile(r'\|[\s]*(國籍|国籍|[Nn]ationality)[\s]*=[\s]*({{[\s]*ROC[\s]*}})')
-    re_death_place = re.compile(r'\|[\s]*(逝世地點|逝世地点|[Dd]eath_place|[Pp]lace_of_death|[Rr]esting_place)[\s]*=[\s]*({{[\s]*ROC[\s]*}})')
-    re_death_place_flagicon = re.compile(r'\|[\s]*(逝世地點|逝世地点|[Dd]eath_place|[Pp]lace_of_death|[Rr]esting_place)[\s]*=[\s]*({{[\s]*flagicon[\s]*\|[\s]*ROC[\s]*}})')
+    re_roc = re.compile(r"({{[\s]*ROC[\s]*}})")
+    re_roc_flagicon = re.compile(r"({{[\s]*[Ff]lagicon[\s]*\|[\s]*ROC[\s]*}})")
+    re_nationality = re.compile(
+        r"\|[\s]*(國籍|国籍|[Nn]ationality)[\s]*=[\s]*({{[\s]*ROC[\s]*}})"
+    )
+    re_death_place = re.compile(
+        r"\|[\s]*(逝世地點|逝世地点|[Dd]eath_place|[Pp]lace_of_death|[Rr]esting_place)[\s]*=[\s]*({{[\s]*ROC[\s]*}})"
+    )
+    re_death_place_flagicon = re.compile(
+        r"\|[\s]*(逝世地點|逝世地点|[Dd]eath_place|[Pp]lace_of_death|[Rr]esting_place)[\s]*=[\s]*({{[\s]*flagicon[\s]*\|[\s]*ROC[\s]*}})"
+    )
 
     comment = "<!-- replaced_flag 0 by %s -->" % user
     replaced_chn = r"{{CHN}}" + comment
@@ -96,7 +103,7 @@ def clean_roc(site: Site, user: str):
                         replace_nationality = True
                         break
                 m = re_death.match(cat.title())
-                if m or cat.title() == '在世人物':
+                if m or cat.title() == "在世人物":
                     y = m.group(1)
                     if int(y) > 1949:
                         reason = "在世人物或新中国成立后逝世的人物"
@@ -119,43 +126,55 @@ def clean_roc(site: Site, user: str):
                 if replace_nationality:
                     # nationality
                     try:
-                        page.text, n1 = re_nationality.subn(replaced_chn_nationality, page.text)
-                    except:
+                        page.text, n1 = re_nationality.subn(
+                            replaced_chn_nationality, page.text
+                        )
+                    except Exception:
                         continue
                     n += n1
                 if replace_nationality_no_flag:
                     # nationality
                     try:
-                        page.text, n1 = re_nationality.subn(replaced_chn_no_flag, page.text)
-                    except:
+                        page.text, n1 = re_nationality.subn(
+                            replaced_chn_no_flag, page.text
+                        )
+                    except Exception:
                         continue
                     n += n1
                 if replace_death:
                     try:
-                        page.text, n1 = re_death_place.subn(replaced_death_place, page.text)
-                    except:
+                        page.text, n1 = re_death_place.subn(
+                            replaced_death_place, page.text
+                        )
+                    except Exception:
                         continue
                     n += n1
                     try:
-                        page.text, n1 = re_death_place_flagicon.subn(replaced_death_place_flagicon, page.text)
-                    except:
+                        page.text, n1 = re_death_place_flagicon.subn(
+                            replaced_death_place_flagicon, page.text
+                        )
+                    except Exception:
                         continue
                     n += n1
                 if replace_all:
                     try:
                         page.text, n1 = re_roc.subn(replaced_chn, page.text)
-                    except:
+                    except Exception:
                         continue
                     n += n1
                     try:
-                        page.text, n1 = re_roc_flagicon.subn(replaced_chn_flagicon, page.text)
-                    except:
+                        page.text, n1 = re_roc_flagicon.subn(
+                            replaced_chn_flagicon, page.text
+                        )
+                    except Exception:
                         continue
                     n += n1
                 if n:
                     try:
-                        page.save(("[[User:Njzjzbot/task1|机器人：替换%d个非法旗帜]] - " % n) + reason)
-                    except:
+                        page.save(
+                            ("[[User:Njzjzbot/task1|机器人：替换%d个非法旗帜]] - " % n) + reason
+                        )
+                    except Exception:
                         continue
                     logging(site, user, page.title(), n)
                     n_replaced.update(n)
@@ -164,7 +183,7 @@ def clean_roc(site: Site, user: str):
 
 def main(user, password):
     """Replace ROC flags with PRC flags.
-    
+
     Parameters
     ----------
     user : str

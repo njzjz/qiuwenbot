@@ -16,7 +16,7 @@
 #
 import re
 from abc import ABCMeta, abstractmethod
-from typing import Tuple, Union, List
+from typing import List, Union
 
 
 class Filter(metaclass=ABCMeta):
@@ -25,22 +25,22 @@ class Filter(metaclass=ABCMeta):
     @abstractmethod
     def filter(self, text: str) -> str:
         """Filter text.
-        
+
         Parameters
         ----------
         text : str
             Text to filter.
-        
+
         Returns
         -------
         str
-            Filtered text.        
+            Filtered text.
         """
 
     @property
     def log(self) -> Union[str, None]:
         """Log of the filter.
-        
+
         Returns
         -------
         str
@@ -50,7 +50,7 @@ class Filter(metaclass=ABCMeta):
 
 class TextReplaceFilter(Filter):
     """Filter to replace texts.
-    
+
     Parameters
     ----------
     pattern : str
@@ -58,6 +58,7 @@ class TextReplaceFilter(Filter):
     repl : str
         Replacement.
     """
+
     def __init__(self, pattern: str, repl: str) -> None:
         super().__init__()
         self.prog = re.compile(pattern)
@@ -65,39 +66,40 @@ class TextReplaceFilter(Filter):
 
     def filter(self, text: str) -> str:
         """Filter text.
-        
+
         Parameters
         ----------
         text : str
             Text to filter.
-        
+
         Returns
         -------
         str
-            Filtered text.        
+            Filtered text.
         """
         return self.prog.sub(self.repl, text)
 
     @property
     def log(self) -> str:
         """Log of the filter.
-        
+
         Returns
         -------
         str
             Log of the filter.
         """
-        return "替换%s为%s" % (self.prog.pattern, self.repl)
+        return f"替换{self.prog.pattern}为{self.repl}"
 
 
 class FilterChain(Filter):
     """Filter chain.
-    
+
     Parameters
     ----------
     filters : list of Filter
         Filters to apply.
     """
+
     def __init__(self, filters: List[Filter]) -> None:
         super().__init__()
         self.filters = [filter() for filter in filters]
@@ -105,16 +107,16 @@ class FilterChain(Filter):
 
     def filter(self, text: str) -> str:
         """Filter text.
-        
+
         Parameters
         ----------
         text : str
             Text to filter.
-        
+
         Returns
         -------
         str
-            Filtered text.        
+            Filtered text.
         """
         active_filters = []
         for filter in self.filters:
@@ -128,7 +130,7 @@ class FilterChain(Filter):
     @property
     def log(self) -> str:
         """Log of the filter.
-        
+
         Returns
         -------
         str
@@ -145,15 +147,15 @@ default_filters = []
 
 
 def register_filter(cls: Filter) -> Filter:
-    """Decorator to register filter.
+    """Return a decorator to register filter.
 
     The filter should not have any parameters in its constructor.
-    
+
     Parameters
     ----------
     cls : Filter
         Filter to register.
-    
+
     Returns
     -------
     Filter

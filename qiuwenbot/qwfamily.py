@@ -18,20 +18,19 @@ from pywikibot import family
 
 
 class QiuwenFamily(family.Family):
-    """Qiuwen faimily"""
-    name = 'qiuwen'
-    langs = {
-        'zh': 'www.qiuwenbaike.cn'
-    }
+    """Qiuwen faimily."""
+
+    name = "qiuwen"
+    langs = {"zh": "www.qiuwenbaike.cn"}
 
     def scriptpath(self, code):
-        return ''
+        return ""
 
     def protocol(self, code):
-        return 'HTTPS'
+        return "HTTPS"
 
     def isPublic(self):
         return False
 
 
-family.Family._families['qiuwen'] = QiuwenFamily()
+family.Family._families["qiuwen"] = QiuwenFamily()

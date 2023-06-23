@@ -15,6 +15,7 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 import re
+
 try:
     import importlib.resources as pkg_resources
 except ImportError:
@@ -22,6 +23,7 @@ except ImportError:
     import importlib_resources as pkg_resources
 
 import qiuwenbot.filter
+
 from .common import get_comment
 from .filter import Filter, register_filter
 
@@ -29,22 +31,26 @@ from .filter import Filter, register_filter
 @register_filter
 class CleanRefsFilter(Filter):
     """Filter to clean references."""
+
     def __init__(self):
         """Initialize the filter."""
-        self.rerefs = re.compile(r'(?is)<ref(?P<params>[^>/]*)>(?P<content>.*?)</ref>')
-        self.removed_urls = pkg_resources.read_text(qiuwenbot.filter, 'ref_blacklist.txt').splitlines()
+        self.rerefs = re.compile(r"(?is)<ref(?P<params>[^>/]*)>(?P<content>.*?)</ref>")
+        self.removed_urls = pkg_resources.read_text(
+            qiuwenbot.filter, "ref_blacklist.txt"
+        ).splitlines()
 
     def filter(self, text: str) -> str:
         for match in self.rerefs.finditer(text):
-            ref = match.group('content')
-            removed = tuple((url in str(ref) for url in self.removed_urls))
+            ref = match.group("content")
+            removed = tuple(url in str(ref) for url in self.removed_urls)
             try:
                 ii = removed.index(True)
             except ValueError:
                 continue
             else:
                 text = text.replace(
-                    match.group(), get_comment("removed_ref site%d" % (ii,)))
+                    match.group(), get_comment("removed_ref site%d" % (ii,))
+                )
         return text
 
     @property

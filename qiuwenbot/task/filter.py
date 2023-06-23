@@ -14,16 +14,17 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
-from typing import Generator
 
 import pywikibot
 from pywikibot import Page
-from .task import Task
+
 from ..filter.filter import FilterChain, default_filters
+from .task import Task
+
 
 class FilterTask(Task):
     """A task to pass filters.
-    
+
     Parameters
     ----------
     user : str
@@ -33,16 +34,21 @@ class FilterTask(Task):
     pages : str
         Pages to operate.
     """
-    def __init__(self,
-                 user: str,
-                 password: str,
-                 pages: dict,
-                 ):
+
+    def __init__(
+        self,
+        user: str,
+        password: str,
+        pages: dict,
+    ):
         """Initialize."""
-        super().__init__(user, password, pages,
-                         r"User:%s/filter_log" % user,
-                         "综合治理",
-                         )
+        super().__init__(
+            user,
+            password,
+            pages,
+            r"User:%s/filter_log" % user,
+            "综合治理",
+        )
         self.filter = FilterChain(default_filters)
 
     def do(self, page: Page) -> bool:
@@ -54,6 +60,10 @@ class FilterTask(Task):
         page.text = new_text
         try:
             page.save(self.filter.log)
-        except (pywikibot.exceptions.LockedPageError, pywikibot.exceptions.EditConflictError, pywikibot.exceptions.SpamblacklistError):
+        except (
+            pywikibot.exceptions.LockedPageError,
+            pywikibot.exceptions.EditConflictError,
+            pywikibot.exceptions.SpamblacklistError,
+        ):
             return False
         return True

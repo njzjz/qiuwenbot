@@ -24,7 +24,7 @@ from .filter import Filter, register_filter
 @register_filter
 class ReplaceROCyear(Filter):
     """Filter to replace ROC year from a string.
-    
+
     Parameters
     ----------
     pattern : str
@@ -32,23 +32,24 @@ class ReplaceROCyear(Filter):
     repl : str
         Replacement.
     """
+
     def __init__(self):
         self.re_roc_year = re.compile(
-            r'(((\[\[([^\[\]]*\|)?(中(华|華))?民(国|國)\]\])|((中(华|華))?民(国|國)))(\d+|[一二三四五六七八九十]+)年)'
-            )
-    
+            r"(((\[\[([^\[\]]*\|)?(中(华|華))?民(国|國)\]\])|((中(华|華))?民(国|國)))(\d+|[一二三四五六七八九十]+)年)"
+        )
+
     def filter(self, text: str) -> str:
         """Filter text.
-        
+
         Parameters
         ----------
         text : str
             Text to filter.
-        
+
         Returns
         -------
         str
-            Filtered text.        
+            Filtered text.
         """
         # group 0 is the entire string, group -1 is the year
         matched = self.re_roc_year.findall(text)
@@ -69,10 +70,10 @@ class ReplaceROCyear(Filter):
                 # remove duplicate
                 # first remove links
                 text = text.replace("[[%s]]" % ce_year_str, ce_year_str)
-                text = text.replace("%s（%s）" % (ce_year_str, ce_year_str), ce_year_str)
-                text = text.replace("%s(%s)" % (ce_year_str, ce_year_str), ce_year_str)
-                text = text.replace("%s（%s）" % (ce_year_str, str(ce_year)), ce_year_str)
-                text = text.replace("%s(%s)" % (ce_year_str, str(ce_year)), ce_year_str)
+                text = text.replace(f"{ce_year_str}（{ce_year_str}）", ce_year_str)
+                text = text.replace(f"{ce_year_str}({ce_year_str})", ce_year_str)
+                text = text.replace(f"{ce_year_str}（{str(ce_year)}）", ce_year_str)
+                text = text.replace(f"{ce_year_str}({str(ce_year)})", ce_year_str)
         return text
 
     @property
