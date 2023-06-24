@@ -26,9 +26,3 @@ shutil.copyfile(
     os.path.join(tmp_dir, "user-config.py"),
 )
 os.environ["PYWIKIBOT_DIR"] = tmp_dir
-
-from .checkduplicated import main as check_duplicated_pages
-
-__all__ = [
-    "check_duplicated_pages",
-]
