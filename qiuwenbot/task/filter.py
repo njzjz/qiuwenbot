@@ -61,9 +61,7 @@ class FilterTask(Task):
         try:
             page.save(self.filter.log)
         except (
-            pywikibot.exceptions.LockedPageError,
-            pywikibot.exceptions.EditConflictError,
-            pywikibot.exceptions.SpamblacklistError,
+            pywikibot.exceptions.Error,
         ):
             return False
         return True
