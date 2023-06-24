@@ -117,14 +117,12 @@ def devide_parameters(params: str) -> Dict[str, str]:
     Parameters
     ----------
     params : str
-        parameters
+        parameter string
 
     Returns
     -------
     Dict[str, str]
-
-    Parameters
-    ----------
+        dict of params
     """
     if params is None:
         return []

@@ -28,9 +28,7 @@ shutil.copyfile(
 os.environ["PYWIKIBOT_DIR"] = tmp_dir
 
 from .checkduplicated import main as check_duplicated_pages
-from .replaceroc import main as replace_roc
 
 __all__ = [
-    "replace_roc",
     "check_duplicated_pages",
 ]
