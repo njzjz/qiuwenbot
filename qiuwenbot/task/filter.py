@@ -60,8 +60,6 @@ class FilterTask(Task):
         page.text = new_text
         try:
             page.save(self.filter.log)
-        except (
-            pywikibot.exceptions.Error,
-        ):
+        except (pywikibot.exceptions.Error,):
             return False
         return True

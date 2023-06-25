@@ -19,14 +19,11 @@ of Chinese titles, such as zh-cn and zh-hk.
 """
 import pywikibot
 from pywikibot import Page, Site
-from tqdm import tqdm
-from tqdm.contrib.logging import logging_redirect_tqdm
-from qiuwenbot.task.task import Task
 from zhconv import convert_for_mw
 
-from .bot import get_page, login
-from .qwlogger import qwlogger
-from .utils import archieve_page
+from qiuwenbot.task.task import Task
+
+from .bot import get_page
 
 # variants = ("zh-cn", "zh-tw", "zh-hk")
 variants = ("zh-hans", "zh-hant")
@@ -81,7 +78,6 @@ def check_page(page: Page, site: Site):
             page_v.save(
                 f"[[User:Njzjzbot/task2|标记速删模板]]：[[{title_v}]]与[[{title}]]仅有简繁差异"
             )
-
 
 
 class CheckDuplicatedPageTask(Task):
