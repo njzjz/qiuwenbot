@@ -66,6 +66,15 @@ class Task(metaclass=ABCMeta):
             self.pages = self.site.allpages(
                 namespace=pages.get("namespace", 0), start=title
             )
+        elif pages["type"] == "new":
+            self.pages = self.site.newpages(
+                namespace=pages.get("namespace", 0),
+                start=pages.get("start", None),
+                end=pages.get("end", None),
+            )
+        elif pages["type"] == "template":
+            template = get_page(pages["name"], self.site)
+            self.pages = template.getReferences()
         else:
             raise RuntimeError("Unsupported pages type")
         self.summary = summary
