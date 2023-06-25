@@ -19,6 +19,8 @@ import os
 import shutil
 import tempfile
 
+import qiuwenbot.qwfamily  # noqa: F401
+
 tmp_dir = tempfile.mkdtemp(prefix="qiuwenbot")
 # copy user-config.py
 shutil.copyfile(

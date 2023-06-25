@@ -67,10 +67,14 @@ class Task(metaclass=ABCMeta):
                 namespace=pages.get("namespace", 0), start=title
             )
         elif pages["type"] == "new":
-            self.pages = self.site.newpages(
-                namespace=pages.get("namespace", 0),
-                start=pages.get("start", None),
-                end=pages.get("end", None),
+            self.pages = (
+                change[0]
+                for change in self.site.newpages(
+                    returndict=True,
+                    namespaces=pages.get("namespace", 0),
+                    start=pages.get("start", None),
+                    end=pages.get("end", None),
+                )
             )
         elif pages["type"] == "template":
             template = get_page(pages["name"], self.site)
