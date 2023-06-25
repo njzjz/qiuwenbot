@@ -70,6 +70,7 @@ class Task(metaclass=ABCMeta):
             self.pages = (
                 change[0]
                 for change in self.site.newpages(
+                    returndict=True,
                     namespaces=pages.get("namespace", 0),
                     start=pages.get("start", None),
                     end=pages.get("end", None),
