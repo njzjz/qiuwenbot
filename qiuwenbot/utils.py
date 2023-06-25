@@ -125,7 +125,7 @@ def devide_parameters(params: str) -> Dict[str, str]:
         dict of params
     """
     if params is None:
-        return []
+        return {}
     # detect | in another template
     regex_template = get_template_regex()
     params = regex_template.sub("", params)
