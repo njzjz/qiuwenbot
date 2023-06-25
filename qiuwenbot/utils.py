@@ -15,7 +15,8 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 import re
-from typing import Dict, List, Optional
+from typing import Dict
+
 import pywikibot
 from pywikibot.textlib import ignore_case
 
@@ -61,14 +62,19 @@ def get_cat_regex(name: str = r"[^\[\]]+") -> re.Pattern:
     ----------
     name : str, optional
         Name or regex of the category, by default all categories.
-    
+
     Returns
     -------
     List[str]
         Categories.
     """
     namespaces = [ignore_case("Category"), ignore_case("分類"), ignore_case("分类")]
-    return re.compile(r"\[\[ *(?P<namespace>%(namespace)s)\s*:(?P<name>%(name)s)\]\]" % {'name': name, 'namespace': '|'.join(namespaces)})
+    return re.compile(
+        r"\[\[ *(?P<namespace>{namespace})\s*:(?P<name>{name})\]\]".format(
+            name=name, namespace="|".join(namespaces)
+        )
+    )
+
 
 def get_template_regex(name: str = r"[^{\|#0-9][^{\|#]*?") -> re.Pattern:
     """Get templates regex.
@@ -77,27 +83,33 @@ def get_template_regex(name: str = r"[^{\|#0-9][^{\|#]*?") -> re.Pattern:
     ----------
     name : str, optional
         Name or regex of the template, by default all templates.
-    
+
     Returns
     -------
     List[str]
         Templates.
     """
-    return re.compile(r"""
-        {{\s*(?:msg:\s*)?
-        (?P<name>(%(name)s))\s*
-        (?:\|(?P<params> [^{]*?
-                (({{{[^{}]+?}}}
-                    |{{[^{}]+?}}
-                    |{[^{}]*?}
-                ) [^{]*?
+    return re.compile(
+        r"""
+        {{{{\s*(?:msg:\s*)?
+        (?P<name>({name}))\s*
+        (?:\|(?P<params> [^{{]*?
+                (({{{{{{[^{{}}]+?}}}}}}
+                    |{{{{[^{{}}]+?}}}}
+                    |{{[^{{}}]*?}}
+                ) [^{{]*?
                 )*?
             )?
         )?
-        }}
+        }}}}
         |
-        (?P<unhandled_depth>{{\s*[^{\|#0-9][^{\|#]*?\s* [^{]* {{ .* }})
-        """ % {'name': name}, re.VERBOSE | re.DOTALL)
+        (?P<unhandled_depth>{{{{\s*[^{{\|#0-9][^{{\|#]*?\s* [^{{]* {{{{ .* }}}})
+        """.format(
+            name=name
+        ),
+        re.VERBOSE | re.DOTALL,
+    )
+
 
 def devide_parameters(params: str) -> Dict[str, str]:
     """Devide parameters and remove subtemplate in it.
@@ -106,11 +118,13 @@ def devide_parameters(params: str) -> Dict[str, str]:
     ----------
     params : str
         parameters
-    
+
     Returns
     -------
     Dict[str, str]
-        parameters
+
+    Parameters
+    ----------
     """
     if params is None:
         return []

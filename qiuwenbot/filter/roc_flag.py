@@ -16,16 +16,16 @@
 #
 import re
 
-from .filter import Filter, register_filter
-from .common import get_comment
-from qiuwenbot.utils import get_cat_regex, get_template_regex, devide_parameters
+from qiuwenbot.utils import devide_parameters, get_cat_regex, get_template_regex
 
+from .common import get_comment
+from .filter import Filter, register_filter
 
 
 @register_filter
 class ReplaceROCyear(Filter):
     """Filter to replace ROC flag from a string.
-    
+
     Parameters
     ----------
     pattern : str
@@ -33,17 +33,26 @@ class ReplaceROCyear(Filter):
     repl : str
         Replacement.
     """
+
     def __init__(self):
         self.re_bd = get_template_regex(r"[Bb]d")
         self.re_year = re.compile(r"(?P<year>\d+)年")
-        self.re_found = get_cat_regex(r"(?P<year>\d+)年(.*)(设立|建立|成立|创建|創建|設立|启用|啟用)(.*)")
+        self.re_found = get_cat_regex(
+            r"(?P<year>\d+)年(.*)(设立|建立|成立|创建|創建|設立|启用|啟用)(.*)"
+        )
         self.re_event = get_cat_regex(r"(?P<year>\d+)年(台灣|台湾|台灣)(.*)")
 
-        self.re_roc = re.compile(r'({{[\s]*ROC[\s]*}})')
-        self.re_roc_flagicon = re.compile(r'({{[\s]*[Ff]lagicon[\s]*\|[\s]*ROC[\s]*}})')
-        self.re_nationality = re.compile(r'\|[\s]*(國籍|国籍|[Nn]ationality)[\s]*=[\s]*({{[\s]*ROC[\s]*}})')
-        self.re_death_place = re.compile(r'\|[\s]*(逝世地點|逝世地点|[Dd]eath_place|[Pp]lace_of_death|[Rr]esting_place)[\s]*=[\s]*({{[\s]*ROC[\s]*}})')
-        self.re_death_place_flagicon = re.compile(r'\|[\s]*(逝世地點|逝世地点|[Dd]eath_place|[Pp]lace_of_death|[Rr]esting_place)[\s]*=[\s]*({{[\s]*flagicon[\s]*\|[\s]*ROC[\s]*}})')
+        self.re_roc = re.compile(r"({{[\s]*ROC[\s]*}})")
+        self.re_roc_flagicon = re.compile(r"({{[\s]*[Ff]lagicon[\s]*\|[\s]*ROC[\s]*}})")
+        self.re_nationality = re.compile(
+            r"\|[\s]*(國籍|国籍|[Nn]ationality)[\s]*=[\s]*({{[\s]*ROC[\s]*}})"
+        )
+        self.re_death_place = re.compile(
+            r"\|[\s]*(逝世地點|逝世地点|[Dd]eath_place|[Pp]lace_of_death|[Rr]esting_place)[\s]*=[\s]*({{[\s]*ROC[\s]*}})"
+        )
+        self.re_death_place_flagicon = re.compile(
+            r"\|[\s]*(逝世地點|逝世地点|[Dd]eath_place|[Pp]lace_of_death|[Rr]esting_place)[\s]*=[\s]*({{[\s]*flagicon[\s]*\|[\s]*ROC[\s]*}})"
+        )
 
         self.comment = get_comment("replaced_flag 0")
         self.replaced_chn = r"{{CHN}}" + self.comment
@@ -55,16 +64,16 @@ class ReplaceROCyear(Filter):
 
     def filter(self, text: str) -> str:
         """Filter text.
-        
+
         Parameters
         ----------
         text : str
             Text to filter.
-        
+
         Returns
         -------
         str
-            Filtered text.        
+            Filtered text.
         """
         yy = []
         replace_all = False
@@ -91,7 +100,7 @@ class ReplaceROCyear(Filter):
                     # born after 1949
                     replace_all = True
                     replace_nationality = True
-    
+
         if death is not None:
             m_death = self.re_year.search(death)
             if m_death is not None:
@@ -121,7 +130,9 @@ class ReplaceROCyear(Filter):
             text = self.re_nationality.sub(self.replaced_chn_no_flag, text)
         if replace_death:
             text = self.re_death_place.sub(self.replaced_death_place, text)
-            text = self.re_death_place_flagicon.sub(self.replaced_death_place_flagicon, text)        
+            text = self.re_death_place_flagicon.sub(
+                self.replaced_death_place_flagicon, text
+            )
         if replace_all:
             text = self.re_roc.sub(self.replaced_chn, text)
             text = self.re_roc_flagicon.sub(self.replaced_chn_flagicon, text)
