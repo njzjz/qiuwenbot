@@ -37,7 +37,8 @@ def login(user: str, password: str) -> pywikibot.Site:
         fam="qiuwen",
         user=user,
     )
-    pywikibot.data.api.LoginManager(site=site, user=user, password=password).login()
+    pywikibot.login.ClientLoginManager(site=site, user=user, password=password).login_to_site()
+    site.login()
     return site
 
 
