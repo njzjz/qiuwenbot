@@ -17,20 +17,18 @@
 """Check duplicated page with different variants
 of Chinese titles, such as zh-cn and zh-hk.
 """
+import pywikibot
 from pywikibot import Page, Site
-from tqdm import tqdm
-from tqdm.contrib.logging import logging_redirect_tqdm
 from zhconv import convert_for_mw
 
-from .bot import get_page, login
-from .qwlogger import qwlogger
-from .utils import archieve_page
+from qiuwenbot.bot import get_page
+from qiuwenbot.task.task import Task
 
 # variants = ("zh-cn", "zh-tw", "zh-hk")
 variants = ("zh-hans", "zh-hant")
 
 
-def check_page(page: Page, site: Site, user: str):
+def check_page(page: Page, site: Site):
     """Check if a page has duplicated variants.
 
     arameters
@@ -54,7 +52,6 @@ def check_page(page: Page, site: Site, user: str):
                     # has been marked to delete
                     continue
                 # duplicated pages A2
-                reason = "A2"
                 page_v.text = (
                     f"<noinclude>{{{{delete|A2|c1=[[User:Njzjzbot/task2|Njzjzbot]]发现-{{'''{title_v}'''}}-与-{{[[{title}]]}}-仅有简繁差异；请管理员复查页面历史记录，合并差异[[Category:Njzjzbot/A2]]}}}}</noinclude>\n"
                     + page_v.text
@@ -73,7 +70,6 @@ def check_page(page: Page, site: Site, user: str):
                 ):
                     # technical issue
                     continue
-                reason = "R1"
                 page_v.text = (
                     f"<noinclude>{{{{delete|R1|c1=[[User:Njzjzbot/task2|Njzjzbot]]发现-{{'''{title_v}'''}}-与-{{[[:{title}]]}}-仅有简繁差异[[Category:Njzjzbot/R1]]}}}}</noinclude>\n"
                     + page_v.text
@@ -81,61 +77,42 @@ def check_page(page: Page, site: Site, user: str):
             page_v.save(
                 f"[[User:Njzjzbot/task2|标记速删模板]]：[[{title_v}]]与[[{title}]]仅有简繁差异"
             )
-            logging(site, user, title, title_v, reason=reason)
 
 
-def logging(site: Site, user: str, title: str, title_v: str, reason: str = "") -> None:
-    """Log.
-
-    Parameters
-    ----------
-    site : pywikibot.Site
-        qiuwen site
-    user : str
-        username of the bot
-    title : str
-        title of the scanned page
-    title_v : str
-        title of the modified page
-    reason : str
-        reason
-    """
-    page = get_page("User:%s/check_duplicated_log" % user, site)
-    if len(page.text.split("\n")) > 2000:
-        page = archieve_page(page, site)
-    page.text += f"\n# -{{[[:{title}]]}}- - 删除-{{[[:{title_v}]]}}- - {reason} - ~~~~~"
-    page.save("[[User:Njzjzbot/task2|记录标记速删模板的条目]]")
-
-
-def main(user: str, password: str, restart: bool = False, namespace: int = 0):
-    """Start checking duplicated pages.
+class CheckDuplicatedPageTask(Task):
+    """A task to check duplicated pages.
 
     Parameters
     ----------
     user : str
-        username of the bot
+        Username.
     password : str
-        password of the bot
-    restart : bool, default=False
-        restart from the last modified page (requires logs exsiting)
-    namespace : int, default=0
-        namespace
+        Password.
+    pages : str
+        Pages to operate.
     """
-    site = login(user, password)
-    if restart:
-        # read from last page
-        logging_page = get_page("User:%s/check_duplicated_log" % user, site)
-        last_item = logging_page.text.strip().split("\n")[-1]
-        title = last_item.split("-")[0].strip()[7:-4]
-        qwlogger.info("restart from %s" % title)
-        all_pages = site.allpages(start=title, namespace=namespace)
-    else:
-        all_pages = site.allpages(namespace=namespace)
-    with logging_redirect_tqdm():
-        for page in tqdm(all_pages, desc="Scanned pages"):
-            if page.isRedirectPage():
-                continue
-            try:
-                check_page(page, site, user)
-            except Exception:
-                pass
+
+    def __init__(
+        self,
+        user: str,
+        password: str,
+        pages: dict,
+    ):
+        """Initialize."""
+        super().__init__(
+            user,
+            password,
+            pages,
+            r"User:%s/check_duplicated_log" % user,
+            "检查重复页面",
+        )
+
+    def do(self, page: Page) -> bool:
+        """Do the task."""
+        if page.isRedirectPage():
+            return False
+        try:
+            check_page(page, self.site)
+        except pywikibot.exceptions.Error:
+            return False
+        return True
