@@ -19,8 +19,6 @@ import os
 import shutil
 import tempfile
 
-import qiuwenbot.qwfamily  # noqa: F401
-
 tmp_dir = tempfile.mkdtemp(prefix="qiuwenbot")
 # copy user-config.py
 shutil.copyfile(
@@ -28,3 +26,5 @@ shutil.copyfile(
     os.path.join(tmp_dir, "user-config.py"),
 )
 os.environ["PYWIKIBOT_DIR"] = tmp_dir
+
+import qiuwenbot.qwfamily  # noqa: F401, I001
