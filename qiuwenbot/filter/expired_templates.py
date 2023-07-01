@@ -75,12 +75,14 @@ class RemoveExpiredDeadFilter(RemoveExpiredTemplateFilter):
     def __init__(self):
         super().__init__("近期逝世")
 
+
 @register_filter
 class RemoveExpiredDeadFilter2(RemoveExpiredTemplateFilter):
     """Filter to remove {{最近逝世}}."""
 
     def __init__(self):
         super().__init__("最近逝世")
+
 
 @register_filter
 class RemoveExpiredDeadFilter3(RemoveExpiredTemplateFilter):
