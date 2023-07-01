@@ -67,6 +67,7 @@ class RemoveExpiredCurrentFilter(RemoveExpiredTemplateFilter):
     def __init__(self):
         super().__init__("current")
 
+
 @register_filter
 class RemoveExpiredDeadFilter(RemoveExpiredTemplateFilter):
     """Filter to remove {{近期逝世}}."""
