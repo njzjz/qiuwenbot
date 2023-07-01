@@ -14,6 +14,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
+import os
+
 from pywikibot import family
 
 
@@ -21,7 +23,7 @@ class QiuwenFamily(family.Family):
     """Qiuwen faimily."""
 
     name = "qiuwen"
-    langs = {"zh": "www.qiuwenbaike.cn"}
+    langs = {"zh": os.environ.get("QIUWEN_DOMAIN", "www.qiuwenbaike.cn")}
 
     def scriptpath(self, code):
         return ""
