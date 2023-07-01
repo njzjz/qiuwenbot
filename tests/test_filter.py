@@ -14,6 +14,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
+from datetime import datetime, timedelta
 from textwrap import dedent
 
 from qiuwenbot.filter.filter import FilterChain, default_filters
@@ -27,7 +28,7 @@ def test_fileter():
         <timeline>123</timeline>
         <score>456</score>
         <mapframe>789</mapframe>
-    """
+        """
     )
     expected_text = dedent(
         r"""\
@@ -36,7 +37,7 @@ def test_fileter():
         <!-- Removed timeline tag by njzjz/qiuwenbot -->
         <!-- Removed score tag by njzjz/qiuwenbot -->
         <!-- Removed mapframe tag by njzjz/qiuwenbot -->
-    """
+        """
     )
     filter = FilterChain(default_filters)
 
@@ -49,13 +50,13 @@ def test_roc_flag():
         r"""\
         {{ROC}}
         [[Category:1992年台灣]]
-    """
+        """
     )
     expected_text = dedent(
         r"""\
         {{CHN}}<!-- replaced_flag 0 by njzjz/qiuwenbot -->
         [[Category:1992年台灣]]
-    """
+        """
     )
     filter = FilterChain(default_filters)
 
@@ -67,13 +68,36 @@ def test_roc_flag2():
     text = dedent(
         r"""\
         {{bd|1992年}}{{ROC}}
-    """
+        """
     )
     expected_text = dedent(
         r"""\
         {{bd|1992年}}{{CHN}}<!-- replaced_flag 0 by njzjz/qiuwenbot -->
-    """
+        """
     )
+    filter = FilterChain(default_filters)
+
+    text = filter.filter(text)
+    assert text == expected_text
+
+def test_expired_template():
+    date1 = datetime.today() - timedelta(days=60)
+    date2 = datetime.today()
+
+    text = dedent(
+        r"""\
+        {{current|time=%s}}
+        {{current|time=%s}}
+        {{近期逝世|time=%s}}
+        {{近期逝世|time=%s}}
+        """
+    ) % (date1, date2, date1, date2)
+    expected_text = dedent(
+        r"""\
+        {{current|time=%s}}
+        {{近期逝世|time=%s}}
+        """
+    ) % (date2, date2)
     filter = FilterChain(default_filters)
 
     text = filter.filter(text)
