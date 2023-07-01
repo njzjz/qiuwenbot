@@ -1,4 +1,4 @@
-name: Mirror to Bitbucket Repo
+name: Mirror to Qiuwen Developer Center
 
 on: [ push, delete, create ]
 
