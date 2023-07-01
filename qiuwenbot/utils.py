@@ -76,13 +76,15 @@ def get_cat_regex(name: str = r"[^\[\]]+") -> re.Pattern:
     )
 
 
-def get_template_regex(name: str = r"[^{\|#0-9][^{\|#]*?") -> re.Pattern:
+def get_template_regex(name: str = r"[^{\|#0-9][^{\|#]*?", end: str = "") -> re.Pattern:
     """Get templates regex.
 
     Parameters
     ----------
     name : str, optional
         Name or regex of the template, by default all templates.
+    end : str, optional
+        End of the template, by default "".
 
     Returns
     -------
@@ -101,11 +103,10 @@ def get_template_regex(name: str = r"[^{\|#0-9][^{\|#]*?") -> re.Pattern:
                 )*?
             )?
         )?
-        }}}}
-        |
-        (?P<unhandled_depth>{{{{\s*[^{{\|#0-9][^{{\|#]*?\s* [^{{]* {{{{ .* }}}})
+        }}}}{end}
         """.format(
-            name=name
+            name=name,
+            end=end,
         ),
         re.VERBOSE | re.DOTALL,
     )
