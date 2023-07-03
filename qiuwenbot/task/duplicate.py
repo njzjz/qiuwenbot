@@ -19,6 +19,7 @@ of Chinese titles, such as zh-cn and zh-hk.
 """
 import pywikibot
 from pywikibot import Page, Site
+from qiuwenbot.qwlogger import qwlogger
 from zhconv import convert_for_mw
 
 from qiuwenbot.bot import get_page
@@ -114,5 +115,6 @@ class CheckDuplicatedPageTask(Task):
         try:
             check_page(page, self.site)
         except pywikibot.exceptions.Error:
+            qwlogger.exception("Failed to save page %s" % page.title())
             return False
         return True
