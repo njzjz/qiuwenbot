@@ -4,7 +4,7 @@ import os
 
 from qiuwenbot.argparse import normalize
 from qiuwenbot.task.filter import FilterTask
-from qiuwenbot.task.duplicate import DuplicateTask
+from qiuwenbot.task.duplicate import CheckDuplicatedPageTask
 
 
 def submit(args: argparse.Namespace):
@@ -20,7 +20,7 @@ def submit(args: argparse.Namespace):
     if config["task"] == "filter":
         task_class = FilterTask
     elif config["task"] == "duplicate":
-        task_class = DuplicateTask
+        task_class = CheckDuplicatedPageTask
     else:
         raise RuntimeError("Unsupported task type")
     task = task_class(**config)
