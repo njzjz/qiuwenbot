@@ -2,17 +2,26 @@ import argparse
 import json
 import os
 
+from qiuwenbot.argparse import normalize
 from qiuwenbot.task.filter import FilterTask
+from qiuwenbot.task.duplicate import DuplicateTask
 
 
 def submit(args: argparse.Namespace):
     """Submit a task."""
     with open(args.CONFIG) as f:
         config = json.load(f)
+    config = normalize(config)
     try:
         config["password"] = os.environ["QIUWENBOT_PASSWORD"]
     except KeyError as e:
         raise KeyError("Please set environment variable QIUWENBOT_PASSWORD") from e
 
-    task = FilterTask(**config)
+    if config["task"] == "filter":
+        task_class = FilterTask
+    elif config["task"] == "duplicate":
+        task_class = DuplicateTask
+    else:
+        raise RuntimeError("Unsupported task type")
+    task = task_class(**config)
     task.submit()
