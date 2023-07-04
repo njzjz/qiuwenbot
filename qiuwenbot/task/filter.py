@@ -18,6 +18,8 @@
 import pywikibot
 from pywikibot import Page
 
+from qiuwenbot.qwlogger import qwlogger
+
 from ..filter.filter import FilterChain, default_filters
 from .task import Task
 
@@ -61,5 +63,6 @@ class FilterTask(Task):
         try:
             page.save(self.filter.log)
         except (pywikibot.exceptions.Error,):
+            qwlogger.exception("Failed to save page %s" % page.title())
             return False
         return True

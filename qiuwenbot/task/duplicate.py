@@ -22,6 +22,7 @@ from pywikibot import Page, Site
 from zhconv import convert_for_mw
 
 from qiuwenbot.bot import get_page
+from qiuwenbot.qwlogger import qwlogger
 from qiuwenbot.task.task import Task
 
 # variants = ("zh-cn", "zh-tw", "zh-hk")
@@ -114,5 +115,6 @@ class CheckDuplicatedPageTask(Task):
         try:
             check_page(page, self.site)
         except pywikibot.exceptions.Error:
+            qwlogger.exception("Failed to save page %s" % page.title())
             return False
         return True
