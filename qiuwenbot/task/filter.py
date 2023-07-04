@@ -18,9 +18,10 @@
 import pywikibot
 from pywikibot import Page
 
+from qiuwenbot.qwlogger import qwlogger
+
 from ..filter.filter import FilterChain, default_filters
 from .task import Task
-from qiuwenbot.qwlogger import qwlogger
 
 
 class FilterTask(Task):

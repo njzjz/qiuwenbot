@@ -19,10 +19,10 @@ of Chinese titles, such as zh-cn and zh-hk.
 """
 import pywikibot
 from pywikibot import Page, Site
-from qiuwenbot.qwlogger import qwlogger
 from zhconv import convert_for_mw
 
 from qiuwenbot.bot import get_page
+from qiuwenbot.qwlogger import qwlogger
 from qiuwenbot.task.task import Task
 
 # variants = ("zh-cn", "zh-tw", "zh-hk")
