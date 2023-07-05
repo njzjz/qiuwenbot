@@ -3,8 +3,8 @@ import json
 import os
 
 from qiuwenbot.argparse import normalize
-from qiuwenbot.task.filter import FilterTask
 from qiuwenbot.task.duplicate import DuplicateTask
+from qiuwenbot.task.filter import FilterTask
 
 
 def submit(args: argparse.Namespace):

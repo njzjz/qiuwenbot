@@ -1,4 +1,5 @@
 from typing import List
+
 from dargs import Argument, Variant
 
 
@@ -16,25 +17,57 @@ def page_variant() -> Variant:
     return Variant(
         "type",
         [
-            Argument("all", [
-                Argument("namespace", dtype=int, optional=True, default=0, doc=doc_namespace),
-                Argument("restart", dtype=bool, optional=True, default=False, doc=doc_restart),
-            ],
-            doc=doc_type_all),
-            Argument("new", [
-                Argument("namespace", dtype=int, optional=True, default=0, doc=doc_namespace),
-                Argument("start", dtype=str, optional=True, default=None, doc=doc_start),
-                Argument("end", dtype=str, optional=True, default=None, doc=doc_end),
-            ],
-            doc=doc_type_new),
-            Argument("link", [
-                Argument("name", dtype=str, doc=doc_link_name),
-            ],
-            alias=["template"],
-            doc=doc_type_link),
+            Argument(
+                "all",
+                [
+                    Argument(
+                        "namespace",
+                        dtype=int,
+                        optional=True,
+                        default=0,
+                        doc=doc_namespace,
+                    ),
+                    Argument(
+                        "restart",
+                        dtype=bool,
+                        optional=True,
+                        default=False,
+                        doc=doc_restart,
+                    ),
+                ],
+                doc=doc_type_all,
+            ),
+            Argument(
+                "new",
+                [
+                    Argument(
+                        "namespace",
+                        dtype=int,
+                        optional=True,
+                        default=0,
+                        doc=doc_namespace,
+                    ),
+                    Argument(
+                        "start", dtype=str, optional=True, default=None, doc=doc_start
+                    ),
+                    Argument(
+                        "end", dtype=str, optional=True, default=None, doc=doc_end
+                    ),
+                ],
+                doc=doc_type_new,
+            ),
+            Argument(
+                "link",
+                [
+                    Argument("name", dtype=str, doc=doc_link_name),
+                ],
+                alias=["template"],
+                doc=doc_type_link,
+            ),
         ],
         doc=doc_type,
     )
+
 
 def submit_args() -> List[Argument]:
     doc_username = "Username."
@@ -45,6 +78,7 @@ def submit_args() -> List[Argument]:
         Argument("pages", dtype=dict, doc=doc_pages, sub_variants=[page_variant()]),
         Argument("task", dtype=str, doc=doc_task),
     ]
+
 
 def normalize(data: dict) -> dict:
     base = Argument("base", dtype=dict, sub_fields=submit_args())
