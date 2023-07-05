@@ -19,7 +19,8 @@ def page_variant() -> Variant:
         [
             Argument(
                 "all",
-                [
+                dtype=dict,
+                sub_fields=[
                     Argument(
                         "namespace",
                         dtype=int,
@@ -39,7 +40,8 @@ def page_variant() -> Variant:
             ),
             Argument(
                 "new",
-                [
+                dtype=dict,
+                sub_fields=[
                     Argument(
                         "namespace",
                         dtype=int,
@@ -58,7 +60,8 @@ def page_variant() -> Variant:
             ),
             Argument(
                 "link",
-                [
+                dtype=dict,
+                sub_fields=[
                     Argument("name", dtype=str, doc=doc_link_name),
                 ],
                 alias=["template"],
