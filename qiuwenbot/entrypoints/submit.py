@@ -23,5 +23,6 @@ def submit(args: argparse.Namespace):
         task_class = CheckDuplicatedPageTask
     else:
         raise RuntimeError("Unsupported task type")
+    config.pop("task")
     task = task_class(**config)
     task.submit()

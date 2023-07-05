@@ -82,7 +82,7 @@ class Task(metaclass=ABCMeta):
                     end=end,
                 )
             )
-        elif pages["type"] == "link":
+        elif pages["type"] in ("link", "template"):
             template = get_page(pages["name"], self.site)
             self.pages = template.getReferences()
         else:
