@@ -73,11 +73,11 @@ def page_variant() -> Variant:
 
 
 def submit_args() -> List[Argument]:
-    doc_username = "Username."
+    doc_user = "Username."
     doc_pages = "Configurations of scanned pages."
     doc_task = "Task to submit."
     return [
-        Argument("username", dtype=str, doc=doc_username),
+        Argument("user", dtype=str, doc=doc_user),
         Argument("pages", dtype=dict, doc=doc_pages, sub_variants=[page_variant()]),
         Argument("task", dtype=str, doc=doc_task),
     ]
