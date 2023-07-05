@@ -16,7 +16,7 @@
 #
 from abc import ABCMeta, abstractmethod
 
-from pywikibot import Page
+from pywikibot import Page, Timestamp
 from tqdm import tqdm
 from tqdm.contrib.logging import logging_redirect_tqdm
 
@@ -67,16 +67,22 @@ class Task(metaclass=ABCMeta):
                 namespace=pages.get("namespace", 0), start=title
             )
         elif pages["type"] == "new":
+            start = pages.get("start", None)
+            if start is not None:
+                start = Timestamp.fromISOformat(start)
+            end = pages.get("end", None)
+            if end is not None:
+                end = Timestamp.fromISOformat(end)
             self.pages = (
                 change[0]
                 for change in self.site.newpages(
                     returndict=True,
                     namespaces=pages.get("namespace", 0),
-                    start=pages.get("start", None),
-                    end=pages.get("end", None),
+                    start=start,
+                    end=end,
                 )
             )
-        elif pages["type"] == "template":
+        elif pages["type"] == "link":
             template = get_page(pages["name"], self.site)
             self.pages = template.getReferences()
         else:
