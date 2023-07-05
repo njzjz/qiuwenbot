@@ -12,7 +12,7 @@ classifiers = [
 ]
 dependencies = [
   'bs4',
-  'pywikibot',
+  'pywikibot>=8',
   'requests',
   'zhconv',
   'cn2an',
@@ -25,6 +25,9 @@ test = [
     'pytest',
     'pytest-cov',
 ]
+
+[project.scripts]
+qiuwenbot = "qiuwenbot.__main__:main"
 
 [tool.setuptools_scm]
 
