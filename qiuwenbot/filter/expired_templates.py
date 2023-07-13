@@ -49,7 +49,10 @@ class RemoveExpiredTemplateFilter(Filter):
                     rm = True
                 else:
                     # a month ago
-                    if isotime < datetime.now() - timedelta(days=31):
+                    if (
+                        isotime.timestamp()
+                        < (datetime.now() - timedelta(days=31)).timestamp()
+                    ):
                         rm = True
             if rm:
                 text = text.replace(mm.group(0), "")
