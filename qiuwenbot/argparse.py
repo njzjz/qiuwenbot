@@ -9,7 +9,7 @@ def page_variant() -> Variant:
     doc_type_new = "Scan new pages."
     doc_type_link = "Scan pages that link to a page or include a template."
     doc_link_name = "Name of the page or template."
-    doc_namespace = "Namespace of the pages."
+    doc_namespace = "Namespace(s) of the pages."
     doc_start = "Start time in ISO format."
     doc_end = "End time in ISO format."
     doc_restart = "Restart from the last page in the log."
@@ -44,7 +44,7 @@ def page_variant() -> Variant:
                 sub_fields=[
                     Argument(
                         "namespace",
-                        dtype=int,
+                        dtype=[int, list],
                         optional=True,
                         default=0,
                         doc=doc_namespace,
@@ -63,6 +63,13 @@ def page_variant() -> Variant:
                 dtype=dict,
                 sub_fields=[
                     Argument("name", dtype=str, doc=doc_link_name),
+                    Argument(
+                        "namespace",
+                        dtype=[int, list],
+                        optional=True,
+                        default=None,
+                        doc=doc_namespace,
+                    ),
                 ],
                 alias=["template"],
                 doc=doc_type_link,
