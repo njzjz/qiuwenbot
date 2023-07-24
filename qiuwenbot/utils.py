@@ -92,7 +92,7 @@ def get_template_regex(name: str = r"[^{\|#0-9][^{\|#]*?", end: str = "") -> re.
         Templates.
     """
     return re.compile(
-        r"""
+        rf"""
         {{{{\s*(?:msg:\s*)?
         (?P<name>({name}))\s*
         (?:\|(?P<params> [^{{]*?
@@ -104,10 +104,7 @@ def get_template_regex(name: str = r"[^{\|#0-9][^{\|#]*?", end: str = "") -> re.
             )?
         )?
         }}}}{end}
-        """.format(
-            name=name,
-            end=end,
-        ),
+        """,
         re.VERBOSE | re.DOTALL,
     )
 
