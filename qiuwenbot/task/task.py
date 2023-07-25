@@ -84,7 +84,7 @@ class Task(metaclass=ABCMeta):
             )
         elif pages["type"] in ("link", "template"):
             template = get_page(pages["name"], self.site)
-            self.pages = template.getReferences()
+            self.pages = template.getReferences(namespaces=pages.get("namespace", None))
         else:
             raise RuntimeError("Unsupported pages type")
         self.summary = summary
