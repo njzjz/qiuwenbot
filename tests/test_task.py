@@ -5,7 +5,7 @@ import pywikibot
 from pywikibot import Page
 
 from qiuwenbot.qwlogger import qwlogger
-from qiuwenbot.task import Task
+from qiuwenbot.task.task import Task
 
 
 class UnitTestTask(Task):
