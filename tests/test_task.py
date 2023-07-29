@@ -47,8 +47,8 @@ class UnitTestTask(Task):
         return True
 
 
-@pytest.skipIf(os.environ.get("QIUWENBOT_TEST_USER") is None, "No test user.")
-@pytest.skipIf(os.environ.get("QIUWENBOT_TEST_PASSWORD") is None, "No test password.")
+@pytest.mark.skipif(os.environ.get("QIUWENBOT_TEST_USER") is None, "No test user.")
+@pytest.mark.skipif(os.environ.get("QIUWENBOT_TEST_PASSWORD") is None, "No test password.")
 def test_task():
     """Test task."""
     user = os.environ.get("QIUWENBOT_TEST_USER")
