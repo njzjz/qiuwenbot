@@ -28,6 +28,7 @@ def test_fileter():
         <timeline>123</timeline>
         <score>456</score>
         <mapframe>789</mapframe>
+        [[香港主權移交]]了！
         """
     )
     expected_text = dedent(
@@ -37,6 +38,7 @@ def test_fileter():
         <!-- Removed timeline tag by njzjz/qiuwenbot -->
         <!-- Removed score tag by njzjz/qiuwenbot -->
         <!-- Removed mapframe tag by njzjz/qiuwenbot -->
+        [[香港回归]]了！
         """
     )
     filter = FilterChain(default_filters)
