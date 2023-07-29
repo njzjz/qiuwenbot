@@ -62,7 +62,7 @@ def test_task():
         password=password,
         pages={
             "type": "page",
-            "page": "User:%s/unittest" % user,
+            "name": "User:%s/unittest" % user,
         },
     )
     task.submit()
