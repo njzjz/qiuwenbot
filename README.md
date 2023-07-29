@@ -12,6 +12,7 @@
   - Removing illegal era names of the Taiwan authorities / 清理台湾当局非法年号
   - Correcting terms related to Taiwan / 修正涉台用语
   - Correcting terms related to Hong Kong / 修正涉港用语
+  - Correcting terms related to politics / 修正涉政用语
   - Correcting terms related to "Cultural Revolution" / 修正“文革”用语
 - Marking redundant entries caused by differences between Simplified and Traditional Chinese / 标记简繁差异造成的重复条目
 

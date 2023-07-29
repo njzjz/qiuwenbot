@@ -18,15 +18,15 @@ from .filter import TextReplaceFilter, register_filter
 
 
 @register_filter
-class HKReunificationFilter(TextReplaceFilter):
-    """Filter to fix the Hong Kong Reunification terms."""
+class CNGovFilter(TextReplaceFilter):
+    """Filter to fix the Chinese government terms."""
 
     def __init__(self):
         super().__init__(
-            r"""香港主(权|權)移交""",
-            r"香港回归",
+            r"""(中国|中國|北京)(当局|當局)""",
+            r"中国政府",
         )
 
     @property
     def log(self) -> str:
-        return "修正涉港用语1"
+        return "修正涉政用语1"

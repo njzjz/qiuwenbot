@@ -29,6 +29,7 @@ def test_fileter():
         <score>456</score>
         <mapframe>789</mapframe>
         [[香港主權移交]]了！
+        北京当局
         """
     )
     expected_text = dedent(
@@ -39,6 +40,7 @@ def test_fileter():
         <!-- Removed score tag by njzjz/qiuwenbot -->
         <!-- Removed mapframe tag by njzjz/qiuwenbot -->
         [[香港回归]]了！
+        中国政府
         """
     )
     filter = FilterChain(default_filters)
