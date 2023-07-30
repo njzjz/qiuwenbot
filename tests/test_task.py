@@ -1,6 +1,6 @@
 import os
-import pytest
 
+import pytest
 import pywikibot
 from pywikibot import Page
 
@@ -53,9 +53,12 @@ def test_task():
     """Test task."""
     user = os.environ.get("QIUWENBOT_TEST_USER")
     password = os.environ.get("QIUWENBOT_TEST_PASSWORD")
-    task = UnitTestTask(user=user, password=password, pages={
-        "type": "page",
-        "page": "User:%s/unittest" % user,
-        }
+    task = UnitTestTask(
+        user=user,
+        password=password,
+        pages={
+            "type": "page",
+            "page": "User:%s/unittest" % user,
+        },
     )
     task.submit()
