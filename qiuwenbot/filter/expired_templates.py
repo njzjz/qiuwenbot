@@ -31,7 +31,7 @@ class RemoveExpiredTemplateFilter(Filter):
 
     def __init__(self, template: str):
         self.template = template
-        self.template_regex = get_template_regex(template, end="\s*")
+        self.template_regex = get_template_regex(template, end=r"\s*")
 
     def filter(self, text: str) -> str:
         matched = self.template_regex.finditer(text)
