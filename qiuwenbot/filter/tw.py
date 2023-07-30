@@ -202,7 +202,6 @@ class TWWithOthersInTitleFilter(Filter):
         sections = self.sections_re.findall(text)
         level_tw = set()
         level_country = set()
-        print(sections)
         for section in sections:
             if self.tw_re.search(section):
                 level_tw.add(section.count("=") // 2)
