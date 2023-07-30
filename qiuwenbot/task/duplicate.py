@@ -76,7 +76,8 @@ def check_page(page: Page, site: Site):
                     + page_v.text
                 )
             page_v.save(
-                f"[[User:Njzjzbot/task2|标记速删模板]]：[[{title_v}]]与[[{title}]]仅有简繁差异"
+                f"[[User:Njzjzbot/task2|标记速删模板]]：[[{title_v}]]与[[{title}]]仅有简繁差异",
+                asynchronous=True,
             )
 
 

@@ -40,7 +40,7 @@ class UnitTestTask(Task):
         """Do the task."""
         page.text = "单元测试，时间戳：%s" % pywikibot.Timestamp.now().isoformat()
         try:
-            page.save("njzjz/qiuwenbot: 单元测试")
+            page.save("njzjz/qiuwenbot: 单元测试", asynchronous=True)
         except (pywikibot.exceptions.Error,):
             qwlogger.exception("Failed to save page %s" % page.title())
             return False

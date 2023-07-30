@@ -61,7 +61,7 @@ class FilterTask(Task):
             return False
         page.text = new_text
         try:
-            page.save(self.filter.log)
+            page.save(self.filter.log, asynchronous=True)
         except (pywikibot.exceptions.Error,):
             qwlogger.exception("Failed to save page %s" % page.title())
             return False
