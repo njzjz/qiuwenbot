@@ -160,9 +160,9 @@ class TWWithOthersFilter2(TextReplaceFilter):
         coutries_re = "|".join(coutries + countries_hant)
 
         super().__init__(
-            r"(台湾|台灣|臺湾|\[\[台湾\]\]|\[\[台灣\]\]|\[\[臺湾\]\])((和|与|、|,|，|或|或者|及|以及)(\[\[)?(%s))"
+            r"([^国國])(台湾|台灣|臺湾|\[\[台湾\]\]|\[\[台灣\]\]|\[\[臺湾\]\])((和|与|、|,|，|或|或者|及|以及)(\[\[)?(%s))"
             % coutries_re,
-            r"中国台湾\2",
+            r"\1中国台湾\3",
         )
 
     @property
