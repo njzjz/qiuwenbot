@@ -8,6 +8,7 @@ def page_variant() -> Variant:
     doc_type_all = "Scan all pages in alphabetical order."
     doc_type_new = "Scan new pages."
     doc_type_link = "Scan pages that link to a page or include a template."
+    doc_type_page = "Scan a single page."
     doc_link_name = "Name of the page or template."
     doc_namespace = "Namespace(s) of the pages."
     doc_start = "Start time in ISO format."
@@ -73,6 +74,14 @@ def page_variant() -> Variant:
                 ],
                 alias=["template"],
                 doc=doc_type_link,
+            ),
+            Argument(
+                "page",
+                dtype=dict,
+                sub_fields=[
+                    Argument("name", dtype=str, doc=doc_link_name),
+                ],
+                doc=doc_type_page,
             ),
         ],
         doc=doc_type,

@@ -1,4 +1,8 @@
-on: push
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
 name: Test
 jobs:
   testWithTox:
@@ -13,4 +17,8 @@ jobs:
         python-version: '3.11'
     - run: pip install tox
     - run: tox
+      env:
+        QIUWENBOT_TEST_USER: ${{ secrets.QIUWENBOT_TEST_USER }}
+        QIUWENBOT_TEST_PASSWORD: ${{ secrets.QIUWENBOT_TEST_PASSWORD }}
+        QIUWEN_DOMAIN: ${{ secrets.QIUWEN_DOMAIN }}
     - uses: codecov/codecov-action@v3
