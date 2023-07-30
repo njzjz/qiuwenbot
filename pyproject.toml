@@ -42,8 +42,6 @@ qiuwenbot = "qiuwenbot.__main__:main"
 [tool.setuptools_scm]
 
 [tool.ruff]
-target-version = "py37"
-
 select = [
     "E", # errors
     "F", # pyflakes
@@ -51,6 +49,7 @@ select = [
     "I", # isort
     "UP", # pyupgrade
     "C4", # flake8-comprehensions
+    "TID", # flake8-tidy-imports
 ]
 ignore = [
     "E501", # line too long
@@ -67,3 +66,6 @@ ignore = [
     "D213", # multi-line docstring summary should start at the second line
     "D205", # 1 blank line required between summary line and description
 ]
+
+[tool.ruff.pydocstyle]
+convention = "numpy"
