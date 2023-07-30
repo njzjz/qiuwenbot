@@ -30,6 +30,8 @@ def test_fileter():
         <mapframe>789</mapframe>
         [[香港主權移交]]了！
         北京当局
+        中华民国（台湾）
+        中华民国台北市
         """
     )
     expected_text = dedent(
@@ -41,6 +43,8 @@ def test_fileter():
         <!-- Removed mapframe tag by njzjz/qiuwenbot -->
         [[香港回归]]了！
         中国政府
+        中国台湾
+        中国台湾台北市
         """
     )
     filter = FilterChain(default_filters)
