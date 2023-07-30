@@ -136,3 +136,26 @@ def test_tw_univ():
 
     text = filter.filter(text)
     assert text == expected_text
+
+
+def test_historical_authority():
+    text = dedent(
+        r"""\
+        满洲国
+        伪满洲国
+        汪精卫政权
+        清治时期
+        """
+    )
+    expected_text = dedent(
+        r"""\
+        伪满洲国
+        伪满洲国
+        汪伪政权
+        清朝时期
+        """
+    )
+    filter = FilterChain(default_filters)
+
+    text = filter.filter(text)
+    assert text == expected_text

@@ -37,7 +37,7 @@ class TWLeaderFilter(TextReplaceFilter):
 
 @register_filter
 class TWJPFilter(TextReplaceFilter):
-    """Filter to fix the leader name in the Taiwan area."""
+    """Filter to fix the Japanese authorities."""
 
     def __init__(self):
         super().__init__(
@@ -48,6 +48,21 @@ class TWJPFilter(TextReplaceFilter):
     @property
     def log(self) -> str:
         return "修正涉台用语2"
+
+
+@register_filter
+class TWQingFilter(TextReplaceFilter):
+    """Filter to fix the Qing authorities."""
+
+    def __init__(self):
+        super().__init__(
+            r"清治(时期|時期)",
+            r"清朝\1",
+        )
+
+    @property
+    def log(self) -> str:
+        return "修正涉台用语2-2"
 
 
 @register_filter
