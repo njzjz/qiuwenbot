@@ -28,3 +28,6 @@ shutil.copyfile(
 os.environ["PYWIKIBOT_DIR"] = tmp_dir
 
 import qiuwenbot.qwfamily  # noqa: F401, I001
+
+def __del__():
+    shutil.rmtree(tmp_dir, ignore_errors=True)
