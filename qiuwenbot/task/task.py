@@ -20,9 +20,9 @@ from pywikibot import Page, Timestamp
 from tqdm import tqdm
 from tqdm.contrib.logging import logging_redirect_tqdm
 
-from ..bot import get_page, login
-from ..qwlogger import qwlogger
-from ..utils import archieve_page
+from qiuwenbot.bot import get_page, login
+from qiuwenbot.qwlogger import qwlogger
+from qiuwenbot.utils import archieve_page
 
 
 class Task(metaclass=ABCMeta):
