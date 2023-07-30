@@ -171,6 +171,7 @@ def test_tw_with_countries():
         台湾、澳大利亚
         == 香港 ==
         香港345
+        [[委内瑞拉]]、[[台湾]]、[[比利時]]
         """
     )
     expected_text = dedent(
@@ -182,6 +183,7 @@ def test_tw_with_countries():
         中国台湾、澳大利亚
         == 中国香港 ==
         香港345
+        [[委内瑞拉]]、中国台湾、[[比利時]]
         """
     )
     filter = FilterChain(default_filters)
