@@ -14,7 +14,13 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
-from .filter import TextReplaceFilter, register_filter
+import re
+
+from zhconv import convert_for_mw
+
+from qiuwenbot.utils import coutries
+
+from .filter import Filter, TextReplaceFilter, register_filter
 
 
 @register_filter
@@ -124,3 +130,89 @@ class TWNameFilter2(TextReplaceFilter):
     @property
     def log(self) -> str:
         return "修正涉台用语6"
+
+
+@register_filter
+class TWWithOthersFilter1(TextReplaceFilter):
+    """Filter to fix the Taiwan name when it is with other countries."""
+
+    def __init__(self):
+        countries_hant = [convert_for_mw(xx, "zh-hant") for xx in coutries]
+        coutries_re = "|".join(coutries + countries_hant)
+
+        super().__init__(
+            r"((%s)(\]\])?(和|与|、|,|，|或|或者|及|以及))(台湾|台灣|臺湾|\[\[台湾\]\]|\[\[台灣\]\]|\[\[臺湾\]\])"
+            % coutries_re,
+            r"\1中国台湾",
+        )
+
+    @property
+    def log(self) -> str:
+        return "修正中国台湾与国家并列时的称呼1"
+
+
+@register_filter
+class TWWithOthersFilter2(TextReplaceFilter):
+    """Filter to fix the Taiwan name when it is with other countries."""
+
+    def __init__(self):
+        countries_hant = [convert_for_mw(xx, "zh-hant") for xx in coutries]
+        coutries_re = "|".join(coutries + countries_hant)
+
+        super().__init__(
+            r"(台湾|台灣|臺湾|\[\[台湾\]\]|\[\[台灣\]\]|\[\[臺湾\]\])((和|与|、|,|，|或|或者|及|以及)(\[\[)?(%s))"
+            % coutries_re,
+            r"中国台湾\2",
+        )
+
+    @property
+    def log(self) -> str:
+        return "修正中国台湾与国家并列时的称呼2"
+
+
+@register_filter
+class TWWithOthersInTitleFilter(Filter):
+    """Filter to fix the Taiwan name in title when it is with other countries."""
+
+    def __init__(self):
+        self.sections_re = re.compile(r"\n\s*[=]{2,5}\s*[^=]+\s*[=]{2,5}\s*\n")
+        countries_hant = [convert_for_mw(xx, "zh-hant") for xx in coutries]
+        self.coutries_re = re.compile(
+            r"\n\s*[=]{2,5}\s*(%s)\s*[=]{2,5}\s*\n"
+            % "|".join(coutries + countries_hant)
+        )
+        # fix hk and mc by the way
+        self.tw_re = re.compile(
+            r"(\n\s*[=]{2,5}\s*)(台湾|台灣|臺湾|\[\[台湾\]\]|\[\[台灣\]\]|\[\[臺湾\]\]|香港|澳門|澳门)(\s*[=]{2,5}\s*\n)"
+        )
+
+    def filter(self, text: str) -> str:
+        """Filter text.
+
+        Parameters
+        ----------
+        text : str
+            Text to filter.
+
+        Returns
+        -------
+        str
+            Filtered text.
+        """
+        sections = self.sections_re.findall(text)
+        level_tw = set()
+        level_country = set()
+        print(sections)
+        for section in sections:
+            if self.tw_re.search(section):
+                level_tw.add(section.count("=") // 2)
+            if self.coutries_re.search(section):
+                level_country.add(section.count("=") // 2)
+        if level_tw and level_country:
+            # might be over-replacing, but is fast
+            text = self.tw_re.sub(r"\1中国\2\3", text)
+        return text
+
+    @property
+    def log(self) -> str:
+        return "修正中国台湾与国家并列时的称呼3"
