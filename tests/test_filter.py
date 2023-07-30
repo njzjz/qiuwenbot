@@ -159,3 +159,32 @@ def test_historical_authority():
 
     text = filter.filter(text)
     assert text == expected_text
+
+
+def test_tw_with_countries():
+    text = dedent(
+        r"""\
+        '''123'''是台湾的。
+        == 台湾 ==
+        澳大利亚与台湾
+        == 澳大利亚 ==
+        台湾、澳大利亚
+        == 香港 ==
+        香港345
+        """
+    )
+    expected_text = dedent(
+        r"""\
+        '''123'''是台湾的。
+        == 中国台湾 ==
+        澳大利亚与中国台湾
+        == 澳大利亚 ==
+        中国台湾、澳大利亚
+        == 中国香港 ==
+        香港345
+        """
+    )
+    filter = FilterChain(default_filters)
+
+    text = filter.filter(text)
+    assert text == expected_text
