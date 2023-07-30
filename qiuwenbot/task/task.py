@@ -17,6 +17,7 @@
 from abc import ABCMeta, abstractmethod
 
 from pywikibot import Page, Timestamp
+from pywikibot.pagegenerators import PreloadingGenerator
 from tqdm import tqdm
 from tqdm.contrib.logging import logging_redirect_tqdm
 
@@ -114,7 +115,7 @@ class Task(metaclass=ABCMeta):
         """Submit the task."""
         with logging_redirect_tqdm():
             n_modified = tqdm(position=1, desc="Modified pages")
-            for page in tqdm(self.pages, desc="Scanned pages"):
+            for page in tqdm(PreloadingGenerator(self.pages), desc="Scanned pages"):
                 if self.do(page):
                     n_modified.update(1)
                     self.logging(page.title())
