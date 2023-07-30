@@ -72,10 +72,40 @@ class TWUnivFilter2(TextReplaceFilter):
     def __init__(self):
         # only fix univ created after 1949
         super().__init__(
-            r"(國立|国立)((高雄师范|高雄師範|彰化師範|彰化师范|台北艺术|臺北藝術|體育|体育|阳明|陽明|阳明交通|陽明交通)大(学|學))",
+            r"(國立|国立)((高雄师范|高雄師範|彰化師範|彰化师范|台北艺术|臺北藝術|臺南|台南|體育|体育|阳明|陽明|阳明交通|陽明交通)大(学|學)|傳統藝術中心|传统艺术中心)",
             r"台湾\2",
         )
 
     @property
     def log(self) -> str:
         return "修正涉台用语4"
+
+
+@register_filter
+class TWNameFilter1(TextReplaceFilter):
+    """Filter to fix the name of the Taiwan area."""
+
+    def __init__(self):
+        super().__init__(
+            r"(中华民国|中華民國)(\||\]\]\[\[)?(台|臺)(湾|灣)",
+            r"中国台湾",
+        )
+
+    @property
+    def log(self) -> str:
+        return "修正涉台用语5"
+
+
+@register_filter
+class TWNameFilter2(TextReplaceFilter):
+    """Filter to fix the name of the Taiwan area."""
+
+    def __init__(self):
+        super().__init__(
+            r"(中华民国|中華民國|\[\[中华民国\]\]|\[\[中華民國\]\])(臺北市|台北市|新北市|桃园市|桃園市|台中市|臺中市|台南市|臺南市|高雄市)",
+            r"中国台湾\2",
+        )
+
+    @property
+    def log(self) -> str:
+        return "修正涉台用语6"
