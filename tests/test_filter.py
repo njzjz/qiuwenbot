@@ -113,3 +113,22 @@ def test_expired_template():
 
     text = filter.filter(text)
     assert text == expected_text
+
+
+def test_tw_univ():
+    text = dedent(
+        r"""\
+        国立台湾大学
+        国立阳明大学
+        """
+    )
+    expected_text = dedent(
+        r"""\
+        台湾大学
+        台湾阳明大学
+        """
+    )
+    filter = FilterChain(default_filters)
+
+    text = filter.filter(text)
+    assert text == expected_text

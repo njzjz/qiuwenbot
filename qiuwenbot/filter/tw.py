@@ -23,7 +23,6 @@ class TWLeaderFilter(TextReplaceFilter):
 
     def __init__(self):
         super().__init__(
-            # not starts with quote
             (
                 r"((\[\[)?(蒋介石|蒋中正|严家淦|蒋经国|李登辉|陈水扁|蔡英文|蔣介石|蔣中正|嚴家淦|蔣經國|李登輝|陳水扁)(\]\])?)"
                 r"((\[\[([^\|\[\]]+\|)?)?(總統|总统)(\]\])?)"
@@ -42,7 +41,6 @@ class TWJPFilter(TextReplaceFilter):
 
     def __init__(self):
         super().__init__(
-            # not starts with quote
             r"日治(时期|時期)",
             r"日占\1",
         )
@@ -50,3 +48,34 @@ class TWJPFilter(TextReplaceFilter):
     @property
     def log(self) -> str:
         return "修正涉台用语2"
+
+
+@register_filter
+class TWUnivFilter1(TextReplaceFilter):
+    """Filter to fix the name of unversities in the Taiwan area."""
+
+    def __init__(self):
+        super().__init__(
+            r"(國立|国立)((臺|台)(灣|湾)((师范|師範|海洋|藝術|艺术|体育(运动)?|科技)?大(學|学)|戲曲學院|戏曲学院)|金门大学|金門大學)",
+            r"\2",
+        )
+
+    @property
+    def log(self) -> str:
+        return "修正涉台用语3"
+
+
+@register_filter
+class TWUnivFilter2(TextReplaceFilter):
+    """Filter to fix the name of unversities in the Taiwan area."""
+
+    def __init__(self):
+        # only fix univ created after 1949
+        super().__init__(
+            r"(國立|国立)((高雄师范|高雄師範|彰化師範|彰化师范|台北艺术|臺北藝術|體育|体育|阳明|陽明|阳明交通|陽明交通)大(学|學))",
+            r"台湾\2",
+        )
+
+    @property
+    def log(self) -> str:
+        return "修正涉台用语4"
