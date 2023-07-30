@@ -32,7 +32,7 @@ class UnitTestTask(Task):
             user,
             password,
             pages,
-            r"User:%s/unittest" % user,
+            r"User:%s/unittest_log" % user,
             "单元测试",
         )
 
