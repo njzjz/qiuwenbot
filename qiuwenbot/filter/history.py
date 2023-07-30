@@ -38,7 +38,7 @@ class FakeManchukuoFilter(TextReplaceFilter):
 
     def __init__(self):
         super().__init__(
-            r"([^伪僞])(滿|满)洲(国|國)",
+            r"([^伪僞偽])(滿|满)洲(国|國)",
             r"\1伪满洲国",
         )
 
