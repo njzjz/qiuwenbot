@@ -207,7 +207,7 @@ class TWWithOthersInTitleFilter(Filter):
                 level_tw.add(section.count("=") // 2)
             if self.coutries_re.search(section):
                 level_country.add(section.count("=") // 2)
-        if level_tw and level_country:
+        if level_tw & level_country:
             # might be over-replacing, but is fast
             text = self.tw_re.sub(r"\1中国\2\3", text)
         return text
