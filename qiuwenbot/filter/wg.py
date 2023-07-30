@@ -25,7 +25,7 @@ class WengeFilter(TextReplaceFilter):
         super().__init__(
             # not starts with quote
             # only replace links as there is something like 马文革
-            r"([^“‘「『\[])((\[\[([^\[\]\|]+\|)?)(文革|文化大革命)(\]\]))",
+            r"([^“‘「『\[])((\[\[([^\[\]\|]+\|)?)(文革|文化大革命|四人帮)(\]\]))",
             r"\1“\2”",
         )
 
