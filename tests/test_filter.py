@@ -23,7 +23,7 @@ from qiuwenbot.filter.filter import FilterChain, default_filters
 def test_fileter():
     text = dedent(
         r"""\
-        民国101年，日治時期“[[文化大革命]]”（[[文化大革命|文革]]）后，
+        民国101年，日治時期“[[文化大革命]]”（[[文化大革命|文革]]）[[四人帮]]倒台后，
         [[蔡英文]][[中华民国总统|总统]]死了<ref>{{cite web|url=https://bbc.com/zhongwen/cywsl}}</ref>。
         <timeline>123</timeline>
         <score>456</score>
@@ -34,7 +34,7 @@ def test_fileter():
     )
     expected_text = dedent(
         r"""\
-        2012年，日占時期“[[文化大革命]]”（“[[文化大革命|文革]]”）后，
+        2012年，日占時期“[[文化大革命]]”（“[[文化大革命|文革]]”）“[[四人帮]]”倒台后，
         [[蔡英文]]死了<!-- removed_ref site5 by njzjz/qiuwenbot -->。
         <!-- Removed timeline tag by njzjz/qiuwenbot -->
         <!-- Removed score tag by njzjz/qiuwenbot -->
