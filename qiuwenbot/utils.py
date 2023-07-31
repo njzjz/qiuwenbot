@@ -47,7 +47,7 @@ def archieve_page(page: pywikibot.Page, site: pywikibot.Site) -> pywikibot.Page:
             if not archieve_page.exists():
                 page.text = page.text.replace("{{Archives}}", "")
                 page.save("删除archieves模板")
-                page.move(title, "存档")
+                page.move(title, "存档", movetalk=False, movesubpages=False)
                 oldpage = get_page(oldtitle, site)
                 oldpage.text = "{{Archives}}"
                 oldpage.save("加入archieves模板")
