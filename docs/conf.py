@@ -42,7 +42,7 @@ extensions = [
     "numpydoc",
     "sphinxarg.ext",
     "dargs.sphinx",
-    "myst",
+    "myst-parser",
 ]
 
 # Add any paths that contain templates here, relative to this directory.
