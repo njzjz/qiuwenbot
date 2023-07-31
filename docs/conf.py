@@ -12,7 +12,6 @@
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
 import os
-import subprocess as sp
 import sys
 from datetime import date
 
@@ -180,6 +179,7 @@ def run_apidoc(_):
             "--force",
         ]
     )
+
 
 def setup(app):
     app.connect("builder-inited", run_apidoc)
