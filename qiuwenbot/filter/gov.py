@@ -23,7 +23,7 @@ class CNGovFilter(TextReplaceFilter):
 
     def __init__(self):
         super().__init__(
-            r"""(中国|中國|北京|中共)(当局|當局|政府)""",
+            r"""(中国|中國|中共)(当局|當局|政府)""",
             r"中国政府",
         )
 

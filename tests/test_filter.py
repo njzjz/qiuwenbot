@@ -29,7 +29,7 @@ def test_fileter():
         <score>456</score>
         <mapframe>789</mapframe>
         [[香港主權移交]]了！
-        北京当局
+        中国当局
         中华民国（台湾）
         中华民国台北市
         """
@@ -124,12 +124,14 @@ def test_tw_univ():
         r"""\
         国立台湾大学
         国立阳明大学
+        “国立体育大学”
         """
     )
     expected_text = dedent(
         r"""\
         台湾大学
         台湾阳明大学
+        “国立体育大学”
         """
     )
     filter = FilterChain(default_filters)
@@ -142,6 +144,7 @@ def test_historical_authority():
     text = dedent(
         r"""\
         满洲国
+        “满洲国”
         伪满洲国
         汪精卫政权
         清治时期
@@ -150,6 +153,7 @@ def test_historical_authority():
     expected_text = dedent(
         r"""\
         伪满洲国
+        “满洲国”
         伪满洲国
         汪伪政权
         清朝时期
