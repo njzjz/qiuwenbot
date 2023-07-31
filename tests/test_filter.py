@@ -124,14 +124,14 @@ def test_tw_univ():
         r"""\
         国立台湾大学
         国立阳明大学
-        "国立体育大学"
+        “国立体育大学”
         """
     )
     expected_text = dedent(
         r"""\
         台湾大学
         台湾阳明大学
-        "国立体育大学"
+        “国立体育大学”
         """
     )
     filter = FilterChain(default_filters)
