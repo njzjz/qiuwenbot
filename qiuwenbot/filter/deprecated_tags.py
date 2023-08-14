@@ -30,7 +30,7 @@ class RemoveTagFilter(TextReplaceFilter):
     def __init__(self, tag: str):
         self.tag = tag
         super().__init__(
-            r"(?is)<{tag}(?P<params>[^>/]*)>(?P<content>.*?)</{tag}>".format(tag=tag),
+            rf"(?is)<{tag}(?P<params>[^>/]*)>(?P<content>.*?)</{tag}>",
             get_comment(rf"Removed {tag} tag"),
         )
 
