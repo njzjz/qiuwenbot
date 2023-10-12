@@ -28,9 +28,13 @@ readme = "README.md"
 keywords = ["qiuwen", "bot"]
 
 [project.optional-dependencies]
+gui = [
+    'dpgui',
+]
 test = [
     'pytest',
     'pytest-cov',
+    'dpgui',
 ]
 docs = [
     "sphinx",
@@ -46,6 +50,9 @@ repository = "https://github.com/njzjz/qiuwenbot"
 
 [project.scripts]
 qiuwenbot = "qiuwenbot.__main__:main"
+
+[project.entry-points."dpgui"]
+"Qiuwen Bot" = "qiuwenbot.argparse:submit_args"
 
 [tool.setuptools_scm]
 
