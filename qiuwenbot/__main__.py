@@ -1,7 +1,7 @@
 import argparse
 
-from qiuwenbot.entrypoints.submit import submit
 from qiuwenbot.entrypoints.gui import start_dpgui
+from qiuwenbot.entrypoints.submit import submit
 
 
 def get_parser() -> argparse.ArgumentParser:
