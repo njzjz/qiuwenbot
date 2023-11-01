@@ -93,26 +93,20 @@ def test_expired_template():
     date1 = datetime.today() - timedelta(days=60)
     date2 = datetime.today()
 
-    text = (
-        dedent(
-            r"""\
+    text = dedent(
+        r"""\
         {{current|time=%s}}
         {{current|time=%s}}
         {{近期逝世|time=%s}}
         {{近期逝世|time=%s}}
         """
-        )
-        % (date1, date2, date1, date2)
-    )
-    expected_text = (
-        dedent(
-            r"""\
+    ) % (date1, date2, date1, date2)
+    expected_text = dedent(
+        r"""\
         {{current|time=%s}}
         {{近期逝世|time=%s}}
         """
-        )
-        % (date2, date2)
-    )
+    ) % (date2, date2)
     filter = FilterChain(default_filters)
 
     text = filter.filter(text)
