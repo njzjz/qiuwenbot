@@ -17,6 +17,7 @@
 """Check duplicated page with different variants
 of Chinese titles, such as zh-cn and zh-hk.
 """
+
 import pywikibot
 from pywikibot import Page, Site
 from zhconv import convert_for_mw

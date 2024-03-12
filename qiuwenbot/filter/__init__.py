@@ -15,6 +15,7 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 """Filter texts."""
+
 import importlib
 from pathlib import Path
 
