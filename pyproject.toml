@@ -42,7 +42,7 @@ docs = [
     "furo",
     "numpydoc",
     "dargs>=0.3.1",
-    "sphinx-argparse",
+    "sphinx-argparse<0.5.0",
 ]
 
 [project.urls]
