@@ -7,7 +7,7 @@ name = "qiuwenbot"
 description = "Qiuwen Baike bot/求闻百科机器人"
 dynamic = ["version"]
 authors = [
-    { name = "Jinzhe Zeng", email = "jinzhe.zeng@rutgers.edu"},
+    { name = "Jinzhe Zeng", email = "jinzhe.zeng@ustc.edu.cn"},
 ]
 license = {file = "LICENSE"}
 classifiers = [
